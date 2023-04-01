@@ -1,0 +1,19 @@
+<!--
+ * Dgmjr.CodeGeneration.Abstractions.props
+ * 
+ *   Created: 2022-11-12-12:17:01
+ *   Modified: 2022-11-12-12:19:05
+ * 
+ *   Author: David G. Moore, Jr. <david@dgmjr.io>
+ *   
+ *   Copyright © 2022-2023 David G. Moore, Jr., All Rights Reserved
+ *      License: MIT (https://opensource.org/licenses/MIT)
+-->
+
+<Project>
+  <ItemGroup>
+    <!-- <Using Include="Microsoft.CodeAnalysis" VersionOverride="4.4.0" />
+    <Using Include="Microsoft.CodeAnalysis.Common" VersionOverride="4.4.0" /> -->
+    <!-- <Using Include="Dgmjr.CodeGeneration.Extensions" ExcludeAssets="Analyzers" /> -->
+  </ItemGroup>
+</Project>

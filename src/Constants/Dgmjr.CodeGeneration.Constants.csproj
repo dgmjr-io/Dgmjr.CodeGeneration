@@ -1,0 +1,33 @@
+<!--
+ * Dgmjr.CodeGeneration.Constants.csproj
+ * 
+ *   Created: 2022-10-31-07:26:14
+ *   Modified: 2022-11-19-04:06:36
+ * 
+ *   Author: David G. Moore, Jr. <david@dgmjr.io>
+ *   
+ *   Copyright © 2022-2023 David G. Moore, Jr., All Rights Reserved
+ *      License: MIT (https://opensource.org/licenses/MIT)
+-->
+
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <!-- <TargetFramework>net7.0</TargetFramework> -->
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+		<Description>This is a **source-code-only** package that contains some constants and helper methods for code generation.</Description>
+		<ImplicitUsings>enabled</ImplicitUsings>
+    <DefineConstants>$(DefineConstants);SCRIBAN_PUBLIC;SCRIBAN_SIGNED</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- <ProjectReference Include="../Scriban/src/Scriban.Signed/Scriban.Signed.csproj" /> -->
+    <Compile Remove="$(MSBuildThisFileDirectory)Resources/**/*" />
+    <!-- <Compile Include="../Scriban/src/Scriban/**/*.cs" /> -->
+    <!-- <EmbeddedResource Include="$(MSBuildThisFileDirectory)/Resources/**/*" LogicalName="%(Filename)%(Extension)" /> -->
+    <PackageReference Include="System.Threading.Tasks.Extensions" VersionOverride="4.5.0" />
+    <!-- <Compile Remove="../Scriban/src/Scriban/**/Scriban.AssemblyInfo.cs" /> -->
+    <!-- <Compile Remove="../Scriban/src/Scriban/**/*.AssemblyAttributes.cs" /> -->
+    <PackageReference Include="Microsoft.CSharp" VersionOverride="4.5.0" />
+    <PackageReference Include="Scriban.Signed" />
+  </ItemGroup>
+  <!-- <Import Project="$(MSBuildThisFileDirectory)Include.items" /> -->
+</Project>

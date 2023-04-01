@@ -1,0 +1,18 @@
+<!--
+ Dgmjr.CodeGeneration.Extensions.csproj
+ 
+   Created: 2022-10-30-10:34:51
+   Modified: 2022-10-30-10:34:52
+ 
+   Author: David G. Moore, Jr. <david@dgmjr.io>
+   
+   Copyright © 2022-2023 David G. Moore, Jr., All Rights Reserved
+      License: MIT (https://opensource.org/licenses/MIT)
+-->
+<Project Sdk="Microsoft.Build.NoTargets">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+	<Description>This is a **source-code-only** package that contains some extension methods to be used with code generation.</Description>
+  </PropertyGroup>
+  <Import Project="$(MSBuildThisFileDirectory)Include.items" />
+</Project>

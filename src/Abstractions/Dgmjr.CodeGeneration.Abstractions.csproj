@@ -1,0 +1,26 @@
+<!--
+ Dgmjr.Generation.Abstractions.csproj
+ 
+   Created: 2022-11-02-12:38:21
+   Modified: 2022-11-02-12:38:21
+ 
+   Author: David G. Moore, Jr. <david@dgmjr.io>
+   
+   Copyright © 2022-2023 David G. Moore, Jr., All Rights Reserved
+      License: MIT (https://opensource.org/licenses/MIT)
+-->
+<Project Sdk="Microsoft.Build.NoTargets">
+  <PropertyGroup>
+    <!-- <TargetFramework>netstandard2.0</TargetFramework> -->
+    <!-- <TargetFrameworks>netstandard2.0</TargetFrameworks> -->
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net6.0;net7.0</TargetFrameworks>
+    <PackageId>Dgmjr.CodeGeneration.Abstractions</PackageId>
+    <AssemblyName>$(PackageId)</AssemblyName>
+    <RootNamespace>$(PackageId)</RootNamespace>
+    <Title>Code Generation Abstractions</Title>
+		<Description>This is a **source-code-only** package that contains some abstractions to help with code generation.</Description>
+		<ImplicitUsings>disabled</ImplicitUsings>
+  </PropertyGroup>
+  <Import Project="$(MSBuildThisFileDirectory)Include.items" />
+  <Import Project="Dgmjr.CodeGeneration.Abstractions.props" />
+</Project>

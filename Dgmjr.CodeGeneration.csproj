@@ -1,0 +1,27 @@
+<!--
+ Dgmjr.CodeGeneration.slnproj
+ 
+   Created: 2022-10-30-10:55:57
+   Modified: 2022-10-30-10:55:58
+ 
+   Author: David G. Moore, Jr. <david@dgmjr.io>
+   
+   Copyright © 2022-2023 David G. Moore, Jr., All Rights Reserved
+      License: MIT (https://opensource.org/licenses/MIT)
+-->
+<Project Sdk="Microsoft.Build.Traversal">
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0</TargetFrameworks>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <UsingMicrosoftNetSdk>true</UsingMicrosoftNetSdk>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="./src/Abstractions/Dgmjr.CodeGeneration.Abstractions.csproj" />
+        <ProjectReference Include="./src/Constants/Dgmjr.CodeGeneration.Constants.csproj" />
+        <ProjectReference Include="./src/Extensions/Dgmjr.CodeGeneration.Extensions.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="**/*.cs" />
+    </ItemGroup>
+</Project>

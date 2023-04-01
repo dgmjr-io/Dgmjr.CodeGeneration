@@ -1,0 +1,25 @@
+<!--
+ * Dgmjr.CodeGeneration.Abstractions.props
+ * 
+ *   Created: 2022-11-12-12:17:01
+ *   Modified: 2022-11-12-12:19:05
+ * 
+ *   Author: David G. Moore, Jr. <david@dgmjr.io>
+ *   
+ *   Copyright © 2022-2023 David G. Moore, Jr., All Rights Reserved
+ *      License: MIT (https://opensource.org/licenses/MIT)
+-->
+
+<Project>
+  <ItemGroup>
+    <!-- <Using Include="Dgmjr.CodeGeneration.Constants" Static="true" /> -->
+  </ItemGroup>
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);SCRIBAN_PUBLIC;SCRIBAN_SIGNED</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Threading.Tasks.Extensions" VersionOverride="4.5.0" />
+    <PackageReference Include="Microsoft.CSharp" VersionOverride="4.5.0" />
+    <Using Include="System.Convert" Alias="Convert" />
+  </ItemGroup>
+</Project>

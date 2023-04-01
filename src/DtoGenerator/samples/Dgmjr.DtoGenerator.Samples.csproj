@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net6.0;net7.0</TargetFrameworks>
+  </PropertyGroup>
+  <ItemGroup>
+   <PackageReference Include="Dgmjr.Primitives" />
+    <ProjectReference Include="../src/Dgmjr.CodeGeneration.DtoGenerator.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,20 @@
+<!--
+ * Include.proj
+ * 
+ *   Created: 2022-11-11-05:53:50
+ *   Modified: 2022-11-11-05:53:50
+ * 
+ *   Author: David G. Moore, Jr. <david@dgmjr.io>
+ *   
+ *   Copyright © 2022-2023 David G. Moore, Jr., All Rights Reserved
+ *      License: MIT (https://opensource.org/licenses/MIT)
+-->
+<Project>
+  <ItemGroup>
+		<Compile Remove="$(MSBuildThisFileDirectory)Resources/**/*" />
+    <!-- <PackageFile Include="@(Compile)" PackagePath="contentFiles/cs/$(TargetFramework)/%(RecursiveDir)%(Filename)%(Extension)" /> -->
+    <!-- <Compile Remove="@(Compile)" />
+    <Compile Remove="$(MSBuildThisFileDirectory)obj/**/*.cs" /> -->
+		
+  </ItemGroup>
+</Project>

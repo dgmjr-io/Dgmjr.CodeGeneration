@@ -1,0 +1,24 @@
+<!--
+ * Dgmjr.CodeGeneration.slnproj
+ * 
+ *   Created: 2022-12-10-06:15:41
+ *   Modified: 2022-12-10-06:15:41
+ * 
+ *   Author: David G. Moore, Jr. <david@dgmjr.io>
+ *   
+ *   Copyright © 2022-2023 David G. Moore, Jr., All Rights Reserved
+ *      License: MIT (https://opensource.org/licenses/MIT)
+-->
+
+<Project Sdk="Microsodft.Build.Traversal">
+  <PropertyGroup>
+    <IncludeInSolutionFile>false</IncludeInSolutionFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="./Scriban/src/Scriban.Signed/Scriban.Signed.csproj" />
+    <ProjectReference Include="./Abstractions/Dgmjr.CodeGeneration.Abstractions.csproj" />
+    <ProjectReference Include="./Constants/Dgmjr.CodeGeneration.Constants.csproj" />
+    <ProjectReference Include="./DtoGenerator/Dgmjr.CodeGeneration.DtoGenerator.csproj" />
+    <ProjectReference Include="./Extensions/Dgmjr.CodeGeneration.Extensions.csproj" />
+  </ItemGroup>
+</Project>
