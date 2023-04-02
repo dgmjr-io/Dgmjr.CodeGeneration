@@ -1,0 +1,237 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": false,
+    },
+    "runOptions": {"reevaluateOnRerun": true},
+    "echoCommand": true,
+    "command": "dotnet",
+    "type": "shell",
+    "tasks": [
+        {
+            "label": "Generate Solution",
+            "command": "slngen",
+            "args": [
+                "${file}"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Build",
+            "args": [
+                "build",
+                "--configuration",
+                "${input:Configuration}",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary",
+                "/nologo",
+                "${input:Project}"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Restore Shared Files",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "build",
+                "--configuration",
+                "${input:Configuration}",
+                "-t:RestoreSharedFiles",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary",
+                "${input:Project}"
+            ],
+            "group": "build",
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Clean",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "clean",
+                "${input:Configuration}",
+                "local",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary",
+                "${input:Project}"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Insert Standard Header (C#)",
+            "command": "./insert-standard-header-csharp.sh",
+            "type": "shell",
+            "args": [
+                "${file}"
+            ],
+            "group": {
+                "kind": "none",
+                "isDefault": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/.vscode"
+            }
+        },
+        {
+            "label": "Insert Standard Header (XML)",
+            "command": "ts-node",
+            "type": "shell",
+            "args": [
+                "./insert-standard-header.xml.ts", "${input:Project}"
+            ],
+            "group": {
+                "kind": "none",
+                "isDefault": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/.vscode"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Push a NuGet Package",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "nuget",
+                "push",
+                "${input:NuGetPackageFile}",
+                "${input:NuGetApiKey}",
+                "--source",
+                "${input:NuGetSource}"
+            ],
+            "group": {
+                "kind": "none",
+                "isDefault": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/.vscode"
+            }
+        },
+        {
+            "label": "Delete a NuGet Package",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "nuget",
+                "delete",
+                "${input:NuGetPackageId}",
+                "${input:NuGetPackageVersion}",
+                "--source",
+                "${input:NuGetSource}",
+                "{input:NuGetApiKey}",
+                "--non-interactive"
+            ],
+            "group": {
+                "kind": "none",
+                "isDefault": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/.vscode"
+            }
+        }
+    ],
+    "inputs": [
+        {
+            "id": "Configuration",
+            "description": "The build configuration",
+            "default": "Local",
+            "options": ["Local", "Debug", "Staging", "Release"],
+            "type": "pickString"
+        },
+        {
+            "id":"Project",
+            "type":"command",
+            "command": "extension.commandvariable.file.pickFile",
+            "default": "${file}",
+            "Description":"Select a project",
+            "args": {
+                "include":["**/*.*proj", "**/*.props", "**/*.targets"],
+                "display":"fileName",
+                "prompt":"Select a project",
+                "keyRemember":"selectedProject",
+                "display": "fileName",
+                "addAsk":true
+            }
+        },
+        {
+            "id":"CSharpFile",
+            "type":"command",
+            "command": "extension.commandvariable.file.pickFile",
+            "default": "${file}",
+            "Description":"Select a file",
+            "args": {
+                "include":"**/*.cs",
+                "display":"fileName"
+            }
+        },
+        {
+            "id": "Target",
+            "description": "The build target",
+            "default": "Build",
+            "type": "pickString",
+            "command": "msbuild",
+            "args": [
+                "${file}",
+                "/nologo",
+                "-targets"
+            ]
+        },
+        {
+            "id": "NuGetPackageFile",
+            "description": "The package to push",
+            "type":"command",
+            "command": "extension.commandvariable.file.pickFile",
+            "default": "${file}",
+            "args": {
+                "include": "**/*.nupkg",
+                "display": "Package File"
+            }
+        },
+        {
+            "id": "NuGetSource",
+            "description": "The package to push",
+            "type": "pickString",
+            "default": "${file}",
+            "options":["Local", "NuGet", "Azure", "GitHub"]
+        },
+        {
+            "id": "NuGetPackageId",
+            "description": "The package ID to delete",
+            "type":"promptString"
+        },
+        {
+            "id": "NuGetPackageVersion",
+            "description": "The package version to delete",
+            "type":"promptString"
+        },
+        {
+            "id": "NuGetApiKey",
+            "description": "The NuGet API key to use in the format -k:API_KEY",
+            "type":"pickString",
+            "default": "",
+            "options": ["", "-k:AZ"]
+        }
+    ]
+}

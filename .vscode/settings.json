@@ -1,0 +1,218 @@
+{
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#541918",
+        "titleBar.activeBackground": "#752421",
+        "titleBar.activeForeground": "#FEFBFB"
+    },
+    "files.eol": "\r\n",
+    "yaml.schemas": {
+        "https://squidfunk.github.io/mkdocs-material/schema.json": "mkdocs.yml",
+        "file:///Users/david/.vscode/extensions/atlassian.atlascode-2.10.12/resources/schemas/pipelines-schema.json": "bitbucket-pipelines.yml",
+        "https://appsemble.app/api.json": "file:///Users/david/GitHub/Dgmjr/mkdocs.yml",
+        "https://taskfile.dev/schema.json": "file:///Users/david/GitHub/Dgmjr/src/Types/.vscode/taskfile.yml"
+    },
+    "files.exclude": {
+        "obj": true,
+        "bin": true
+    },
+    "workspace.isHidden": true,
+    "emeraldwalk.runonsave": {
+        "autoClearConsole": false,
+        "commands": [
+            {
+                "match": ".*\\..*proj",
+                "cmd": "slngen ${file}",
+                "isAsync": true
+            }
+        ],
+        "showOutput": "silent",
+        "runOnSave": true,
+        "shell": "pwsh"
+    },
+    "runOnSave.shell": "pwsh",
+    "runOnSave.commands": [
+        {
+            "globMatch": "**/*proj",
+            "command": "slngen ${file}",
+            "async": true,
+            "notMatch": "*.restoreproj",
+            "workingDirectoryAsCWD": true,
+            "runningStatusMessage": "Generating sln file for ${file}...",
+            "finishStatusMessage": "Done.",
+            "runIn": "terminal"
+        },
+        {
+            "globMatch": "*.usings",
+            "command": "dotnet pack ${file}",
+            "async": true,
+            "workingDirectoryAsCWD": true,
+            "runningStatusMessage": "Generating usings package for file ${file}...",
+            "finishStatusMessage": "Done.",
+            "runIn": "backend"
+        }
+    ],
+    "markdown-preview-enhanced.enableScriptExecution": true,
+    "runTerminalCommand.commands": [
+        {
+            "command": "slngen ${file} ",
+            "name": "Generate Solution File",
+            "auto": true,
+            "match": ".*\\..*proj",
+            "notMatch": "*.restoreproj",
+            "group": ".NET Core"
+        },
+        {
+            "command": "dotnet run",
+            "auto": true,
+            "group": ".NET Core"
+        },
+        {
+            "command": "dotnet build ${file}",
+            "group": ".NET Core",
+            "name": "Build the Project",
+            "preserve": true
+        },
+        {
+            "command": "dotnet add package ${clipboard}",
+            "auto": true,
+            "group": ".NET Core"
+        }
+    ],
+    "command-runner.enableCodeLens": true,
+    "command-runner.commands": {
+        "dotnet": {
+            "command": "dotnet",
+            "args": [
+                "build",
+                "${file}"
+            ],
+            "cwd": "${fileDirname}",
+            "group": ".NET Core",
+            "name": "Build the Project"
+        }
+    },
+    "terminal.external.osxExec": "pwsh",
+    "command-helper.commands": {
+        "slngen": {
+            "command": "slngen",
+            "args": [
+                "${file}"
+            ],
+            "cwd": "${fileDirname}",
+            "group": ".NET Core",
+            "name": "Generate Solution File"
+        },
+        "dotnet": {
+            "command": "dotnet",
+            "args": [
+                "build",
+                "${file}"
+            ],
+            "cwd": "${fileDirname}",
+            "group": ".NET Core",
+            "name": "Build the Project"
+        }
+    },
+    "docomment.activateOnEnter": true,
+    "custom-command-runner.settings.paths": [
+        "../.scripts/custom-commands.ts",
+        "../.scripts/ts"
+    ]
+    // "psi-header.config": {
+    //     "forceToTop": true,
+    //     "blankLinesAfter": 1,
+    //     "spacesBetweenYears": false,
+    //     "license": "MIT",
+    //     "author": "David G. Moore, Jr.",
+    //     "initials": "JC",
+    //     "authorEmail": "david@dgmjr.io",
+    //     "company": "Dgmjr",
+    //     "copyrightHolder": "David G. Moore, Jr.",
+    //     "creationDateZero": "now"
+    //     // "hostname": "Dgmjr.com"
+    // },
+    // "psi-header.changes-tracking": {
+    //     "isActive": true,
+    //     "modAuthor": "Modified By:",
+    //     "modDate": "Last Modified:",
+    //     "modDateFormat": "dd/MM/yyyy hh:nn:ss",
+    //     "include": [
+    //         "msbuild",
+    //         "csharp",
+    //         "xml",
+    //         "yaml",
+    //         "markdown",
+    //         "shellscript",
+    //         "typescript"
+    //     ],
+    //     // "includeGlob": ["*.cs", "*.config", "*.props", "*.targets", "*."],
+    //     // "exclude": ["markdown", "json", "jsonc", "shellscript"],
+    //     "excludeGlob": [
+    //         "**/resources/**"
+    //     ],
+    //     "autoHeader": "off",
+    //     "enforceHeader": true,
+    //     /*"replace": [
+    //         "Filename:",
+    //         "Project"
+    //     ],*/
+    //     "updateLicenseVariables": false
+    // },
+    // "psi-header.variables": [
+    //     [
+    //         "projectCreationYear",
+    //         "2022"
+    //     ]
+    // ],
+    // "psi-header.templates": [
+    //     {
+    //         "language": "*",
+    //         "template": [
+    //             "<<filename>>",
+    //             "",
+    //             "  Created: <<filecreated('YYYY-MM-DD-hh:mm:ss')>>",
+    //             "  Modified: <<dateformat('YYYY-MM-DD-hh:mm:ss')>>",
+    //             "",
+    //             "  Author: <<author>> <<<authoremail>>>",
+    //             "  ",
+    //             "  Copyright © <<yeartoyear(<<projectCreationYear>>, now)>> <<copyrightHolder>>, All Rights Reserved",
+    //             "     License: <<spdxid>> (<<licenseurl>>)"
+    //         ]
+    //     }
+    // ],
+    // "psi-header.lang-config": [
+    //     {
+    //         "language": "xml",
+    //         "begin": "<!--",
+    //         "end": "-->"
+    //     },
+    //     {
+    //         "language": "msbuild",
+    //         "mapTo": "xml"
+    //     },
+    //     {
+    //         "language": "markdown",
+    //         "mapTo": "xml"
+    //     },
+    //     {
+    //         "language": "csharp",
+    //         "begin": "// ",
+    //         "prefix": "// ",
+    //         "end": "// "
+    //     },
+    //     {
+    //         "language": "typescript",
+    //         "mapTo": "csharp"
+    //     },
+    //     {
+    //         "language": "yaml",
+    //         "mapTo": "shellscript"
+    //     },
+    //     {
+    //         "language": "shellscript",
+    //         "begin": "# ",
+    //         "prefix": "# ",
+    //         "end": "# "
+    //     }
+    // ]
+}
