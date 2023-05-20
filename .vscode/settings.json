@@ -1,41 +1,22 @@
 {
-    "workbench.colorCustomizations": {
-        "activityBar.background": "#541918",
-        "titleBar.activeBackground": "#752421",
-        "titleBar.activeForeground": "#FEFBFB"
-    },
     "files.eol": "\r\n",
     "yaml.schemas": {
         "https://squidfunk.github.io/mkdocs-material/schema.json": "mkdocs.yml",
         "file:///Users/david/.vscode/extensions/atlassian.atlascode-2.10.12/resources/schemas/pipelines-schema.json": "bitbucket-pipelines.yml",
-        "https://appsemble.app/api.json": "file:///Users/david/GitHub/Dgmjr/mkdocs.yml",
-        "https://taskfile.dev/schema.json": "file:///Users/david/GitHub/Dgmjr/src/Types/.vscode/taskfile.yml"
+        "https://appsemble.app/api.json": "file:///david/GitHub/Dgmjr/mkdocs.yml",
+        "https://taskfile.dev/schema.json": "file://Users/david/GitHub/Dgmjr/src/Types/.vscode/taskfile.yml"
     },
     "files.exclude": {
-        "obj": true,
-        "bin": true
+        "obj": false,
+        "bin": false
     },
-    "workspace.isHidden": true,
-    "emeraldwalk.runonsave": {
-        "autoClearConsole": false,
-        "commands": [
-            {
-                "match": ".*\\..*proj",
-                "cmd": "slngen ${file}",
-                "isAsync": true
-            }
-        ],
-        "showOutput": "silent",
-        "runOnSave": true,
-        "shell": "pwsh"
-    },
+    "workspace.isHidden": false,
     "runOnSave.shell": "pwsh",
     "runOnSave.commands": [
         {
             "globMatch": "**/*proj",
             "command": "slngen ${file}",
             "async": true,
-            "notMatch": "*.restoreproj",
             "workingDirectoryAsCWD": true,
             "runningStatusMessage": "Generating sln file for ${file}...",
             "finishStatusMessage": "Done.",
@@ -52,72 +33,9 @@
         }
     ],
     "markdown-preview-enhanced.enableScriptExecution": true,
-    "runTerminalCommand.commands": [
-        {
-            "command": "slngen ${file} ",
-            "name": "Generate Solution File",
-            "auto": true,
-            "match": ".*\\..*proj",
-            "notMatch": "*.restoreproj",
-            "group": ".NET Core"
-        },
-        {
-            "command": "dotnet run",
-            "auto": true,
-            "group": ".NET Core"
-        },
-        {
-            "command": "dotnet build ${file}",
-            "group": ".NET Core",
-            "name": "Build the Project",
-            "preserve": true
-        },
-        {
-            "command": "dotnet add package ${clipboard}",
-            "auto": true,
-            "group": ".NET Core"
-        }
-    ],
     "command-runner.enableCodeLens": true,
-    "command-runner.commands": {
-        "dotnet": {
-            "command": "dotnet",
-            "args": [
-                "build",
-                "${file}"
-            ],
-            "cwd": "${fileDirname}",
-            "group": ".NET Core",
-            "name": "Build the Project"
-        }
-    },
     "terminal.external.osxExec": "pwsh",
-    "command-helper.commands": {
-        "slngen": {
-            "command": "slngen",
-            "args": [
-                "${file}"
-            ],
-            "cwd": "${fileDirname}",
-            "group": ".NET Core",
-            "name": "Generate Solution File"
-        },
-        "dotnet": {
-            "command": "dotnet",
-            "args": [
-                "build",
-                "${file}"
-            ],
-            "cwd": "${fileDirname}",
-            "group": ".NET Core",
-            "name": "Build the Project"
-        }
-    },
-    "docomment.activateOnEnter": true,
-    "custom-command-runner.settings.paths": [
-        "../.scripts/custom-commands.ts",
-        "../.scripts/ts"
-    ]
+    "docomment.activateOnEnter": true
     // "psi-header.config": {
     //     "forceToTop": true,
     //     "blankLinesAfter": 1,

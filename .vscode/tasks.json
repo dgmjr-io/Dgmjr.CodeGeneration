@@ -79,37 +79,6 @@
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "Insert Standard Header (C#)",
-            "command": "./insert-standard-header-csharp.sh",
-            "type": "shell",
-            "args": [
-                "${file}"
-            ],
-            "group": {
-                "kind": "none",
-                "isDefault": false
-            },
-            "options": {
-                "cwd": "${workspaceFolder}/.vscode"
-            }
-        },
-        {
-            "label": "Insert Standard Header (XML)",
-            "command": "ts-node",
-            "type": "shell",
-            "args": [
-                "./insert-standard-header.xml.ts", "${input:Project}"
-            ],
-            "group": {
-                "kind": "none",
-                "isDefault": false
-            },
-            "options": {
-                "cwd": "${workspaceFolder}/.vscode"
-            },
-            "problemMatcher": []
-        },
-        {
             "label": "Push a NuGet Package",
             "command": "dotnet",
             "type": "shell",
