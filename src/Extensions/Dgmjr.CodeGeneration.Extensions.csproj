@@ -1,18 +1,36 @@
 <!--
- Dgmjr.CodeGeneration.Extensions.csproj
- 
-   Created: 2022-10-30-10:34:51
-   Modified: 2022-10-30-10:34:52
- 
-   Author: David G. Moore, Jr. <david@dgmjr.io>
-   
-   Copyright © 2022-2023 David G. Moore, Jr., All Rights Reserved
-      License: MIT (https://opensource.org/licenses/MIT)
+ * Dgmjr.CodeGeneration.Extensions.csproj
+ *
+ *   Created: 2023-03-12-08:13:26
+ *   Modified: 2023-05-03-03:41:32
+ *
+ *   Author: David G. Moore, Jr. <david@dgmjr.io>
+ *
+ *   Copyright © 2022 - 2023 David G. Moore, Jr., All Rights Reserved
+ *      License: MIT (https://opensource.org/licenses/MIT)
 -->
-<Project Sdk="Microsoft.Build.NoTargets">
+
+<Project Sdk="Microsoft.NET.Sdk">
+  <Sdk Name="MetapackageSdk" />
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-	<Description>This is a **source-code-only** package that contains some extension methods to be used with code generation.</Description>
+	  <Description>This is a **source-code-only** package that contains some extension methods to be used with code generation.</Description>
   </PropertyGroup>
   <Import Project="$(MSBuildThisFileDirectory)Include.items" />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" />
+    <PackageReference Include="Microsoft.CodeAnalysis" />
+    <ProjectReference Include="./AttributeSymbolExtensions/Dgmjr.CodeGeneration.Extensions.AttributeSymbolExtensions.csproj" />
+    <ProjectReference Include="./AttributeSyntaxExtensions/Dgmjr.CodeGeneration.Extensions.AttributeSyntaxExtensions.csproj" />
+    <ProjectReference Include="./IncrementalGeneratorExtensions/Dgmjr.CodeGeneration.Extensions.IncrementalGeneratorExtensions.csproj" />
+    <ProjectReference Include="./ITypeSymbolExtensions/Dgmjr.CodeGeneration.Extensions.ITypeSymbolExtensions.csproj" />
+    <ProjectReference Include="./MemberDeclarationExtensions/Dgmjr.CodeGeneration.MemberDeclarationExtensions.csproj" />
+    <ProjectReference Include="./PropertySymbolExtensions/Dgmjr.CodeGeneration.Extensions.PropertySymbolExtensions.csproj" />
+    <ProjectReference Include="./StringExtensions/Dgmjr.CodeGeneration.Extensions.StringExtensions.csproj" />
+    <ProjectReference Include="./SyntaxNodeExtensions/Dgmjr.CodeGeneration.Extensions.SyntaxNodeExtensions.csproj" />
+    <ProjectReference Include="./TypeSymbolExtensions/Dgmjr.CodeGeneration.Extensions.ITypeSymbolExtensions.csproj" />
+  </ItemGroup>
 </Project>

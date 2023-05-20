@@ -1,11 +1,11 @@
 <!--
  * Dgmjr.CodeGeneration.Constants.csproj
- * 
+ *
  *   Created: 2022-10-31-07:26:14
  *   Modified: 2022-11-19-04:06:36
- * 
+ *
  *   Author: David G. Moore, Jr. <david@dgmjr.io>
- *   
+ *
  *   Copyright © 2022-2023 David G. Moore, Jr., All Rights Reserved
  *      License: MIT (https://opensource.org/licenses/MIT)
 -->
@@ -13,7 +13,7 @@
 <Project>
   <PropertyGroup>
 		<ImplicitUsings>enabled</ImplicitUsings>
-    <DefineConstants>$(DefineConstants);SCRIBAN_PUBLIC;SCRIBAN_SIGNED</DefineConstants>
+    <DefineConstants>$(DefineConstants);SCRIBAN_PUBLIC;SCRIBAN_SIGNED;SCRIBAN_NO_ASYNC</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Using Include="System.Convert" Alias="Convert" />

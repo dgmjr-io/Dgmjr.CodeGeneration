@@ -1,11 +1,11 @@
 <!--
  * Dgmjr.CodeGeneration.Constants.csproj
- * 
+ *
  *   Created: 2022-10-31-07:26:14
  *   Modified: 2022-11-19-04:06:36
- * 
+ *
  *   Author: David G. Moore, Jr. <david@dgmjr.io>
- *   
+ *
  *   Copyright © 2022-2023 David G. Moore, Jr., All Rights Reserved
  *      License: MIT (https://opensource.org/licenses/MIT)
 -->
@@ -23,10 +23,10 @@
     <Compile Remove="$(MSBuildThisFileDirectory)Resources/**/*" />
     <Compile Include="../../lib/Scriban/src/Scriban/**/*.cs" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)/Resources/**/*" LogicalName="%(Filename)%(Extension)" />
-    <PackageReference Include="System.Threading.Tasks.Extensions" VersionOverride="4.5.0" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" />
     <Compile Remove="../../lib/Scriban/src/Scriban/**/Scriban.AssemblyInfo.cs" />
     <Compile Remove="../../lib/Scriban/src/Scriban/**/*.AssemblyAttributes.cs" />
-    <PackageReference Include="Microsoft.CSharp" VersionOverride="4.5.0" />
+    <PackageReference Include="Microsoft.CSharp" />
     <Compile Remove="IsExternalInit.cs" />
     <Using Include="System.Convert" Alias="Convert" />
   </ItemGroup>
