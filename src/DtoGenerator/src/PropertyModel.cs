@@ -15,8 +15,8 @@ using Microsoft.CodeAnalysis;
 internal record struct PropertyModel(ITypeSymbol property_type, string property_name, bool is_required = false)
 {
     public string PropertyTypeCode => property_type.ToDisplayString();
-    public string PropertyName => property_name;
-    public bool IsRequired => is_required;
-    public string RequiredAttributeCode => IsRequired ? "[Required]" : string.Empty;
-    public string PropertyCode => $"{PropertyTypeCode} {PropertyName} {{ get; set; }}";
+public string PropertyName => property_name;
+public bool IsRequired => is_required;
+public string RequiredAttributeCode => IsRequired ? "[Required]" : string.Empty;
+public string PropertyCode => $"{PropertyTypeCode} {PropertyName} {{ get; set; }}";
 }
