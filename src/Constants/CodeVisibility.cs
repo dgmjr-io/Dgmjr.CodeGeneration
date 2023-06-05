@@ -20,12 +20,12 @@ public static partial class Constants
     {
         private CodeVisibility(string value) { Value = value; }
 
-        public static readonly CodeVisibility Public = new (nameof(Public).ToLower());
-        public static readonly CodeVisibility Private = new (nameof(Private).ToLower());
-        public static readonly CodeVisibility Protected = new (nameof(Protected).ToLower());
-        public static readonly CodeVisibility Internal = new (nameof(Internal).ToLower());
-        public static readonly CodeVisibility ProtectedInternal = new ($"{nameof(Protected)} {nameof(Internal)}".ToLower());
-        public static readonly CodeVisibility PrivateProtected = new ($"{nameof(Private)} {nameof(Protected)}".ToLower());
+        public static readonly CodeVisibility Public = new(nameof(Public).ToLower());
+        public static readonly CodeVisibility Private = new(nameof(Private).ToLower());
+        public static readonly CodeVisibility Protected = new(nameof(Protected).ToLower());
+        public static readonly CodeVisibility Internal = new(nameof(Internal).ToLower());
+        public static readonly CodeVisibility ProtectedInternal = new($"{nameof(Protected)} {nameof(Internal)}".ToLower());
+        public static readonly CodeVisibility PrivateProtected = new($"{nameof(Private)} {nameof(Protected)}".ToLower());
 
         public string Value { get; }
     }
