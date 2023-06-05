@@ -52,15 +52,15 @@ public static partial class Constants
     public {{ data_structure_type_code
 }
 }
-{{ name }}
+{ { name } }
 {
-    {{ for property in properties ~}}
-    {{ property.required_attribute_code }}
-    {{ properties_visibility_code }}
-    {{ property.type_name_code }}
-    {{ property.property_name }}
+    { { for property in properties ~} }
+    { { property.required_attribute_code } }
+    { { properties_visibility_code } }
+    { { property.type_name_code } }
+    { { property.property_name } }
     { get; set; }
-    {{ end ~}}
+    { { end ~} }
 }
 """;
 }
