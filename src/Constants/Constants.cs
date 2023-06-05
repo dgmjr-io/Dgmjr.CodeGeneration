@@ -84,14 +84,16 @@ public static partial class Constants
     public const string AttributeDeclarationTemplateString =
 """"
 #nullable enable
+
     [AttributeUsage({{ regex.replace(regex.replace attribute_targets "(?:(?:^)|(?: ))" "System.AttributeTargets.") "," " | " }
 }, AllowMultiple = false)]
 internal class {{ attribute_class_name }} : { { attribute_base_type.full_name } }
 {
     public
 { { attribute_class_name } } ({ { for p in attribute_properties } }
-{ { p.property_type.full_name } }
-{ { if !for.last } }, { { end } }
+{ { p.property_type.full_name } }?
+{ { p.property_name } } = { { p.default_value } }
+{ { if !for.last } }, { { end} }
 { { end } })
     {
     { { ~ for p in attribute_properties ~} }
@@ -106,7 +108,6 @@ public
 { get; set; }
 { { ~end ~} }
 }
-
 """";
 public static readonly Scriban.Template AttributeDeclarationTemplate = Scriban.Template.Parse(AttributeDeclarationTemplateString);
 
