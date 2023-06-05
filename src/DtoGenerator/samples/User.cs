@@ -43,7 +43,7 @@ public class User
     /// <summary>Gets or sets the user's email address as a string.</summary>
     public virtual string? Email { get; set; }
     /// <summary>Gets or sets the normalized email address for this user as a string.</summary>
-    public virtual string? NormalizedEmail  { get; set; }
+    public virtual string? NormalizedEmail { get; set; }
     /// <summary>Gets or sets the user's username (usually the same as the <see cref="TelegramUsername" />)</summary>
     /// <example>Dgmjr</example>
     public virtual string? UserName { get; set; }

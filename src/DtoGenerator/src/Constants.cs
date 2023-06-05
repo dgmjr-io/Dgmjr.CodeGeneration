@@ -49,12 +49,18 @@ public static partial class Constants
 
     namespace {{ namespace }};
 
-    public {{ data_structure_type_code }} {{ name }}
-    {
-        {{ for property in properties ~}}
-        {{ property.required_attribute_code }}
-        {{ properties_visibility_code }} {{ property.type_name_code }} {{ property.property_name }} { get; set; }
-        {{ end ~}}
-    }
-    """;
+    public {{ data_structure_type_code
+}
+}
+{ { name } }
+{
+    { { for property in properties ~} }
+    { { property.required_attribute_code } }
+    { { properties_visibility_code } }
+    { { property.type_name_code } }
+    { { property.property_name } }
+    { get; set; }
+    { { end ~} }
+}
+""";
 }
