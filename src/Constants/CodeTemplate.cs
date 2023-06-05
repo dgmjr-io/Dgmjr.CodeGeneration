@@ -27,7 +27,7 @@ public record struct CodeTemplate
         }
         catch (Exception e)
         {
-            throw new Exception($"Could not load resource {manifestResourceName}", e);
+            throw new ArgumentException($"Could not load resource {manifestResourceName}", e);
         }
     }
 }
