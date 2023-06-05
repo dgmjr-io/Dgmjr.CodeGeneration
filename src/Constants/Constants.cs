@@ -102,8 +102,8 @@ internal class {{ attribute_class_name }} : {{ attribute_base_type.full_name }}
     public static readonly Scriban.Template AttributeDeclarationTemplate = Scriban.Template.Parse(AttributeDeclarationTemplateString);
 
 
-    public static readonly string ToolName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
-    public static readonly string ToolVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+    public static readonly string ToolName = typeof(Constants).Assembly.GetName().Name;
+    public static readonly string ToolVersion = typeof(Constants).Assembly.GetName().GetName().Version.ToString();
     public static readonly string MinimalCodeHeaderTemplateString =
 $$$""""
 /*
