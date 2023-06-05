@@ -87,26 +87,26 @@ public static partial class Constants
 
     [AttributeUsage({{ regex.replace(regex.replace attribute_targets "(?:(?:^)|(?: ))" "System.AttributeTargets.") "," " | " }
 }, AllowMultiple = false)]
-internal class {{ attribute_class_name }} : {{ attribute_base_type.full_name }}
+internal class {{ attribute_class_name }} : { { attribute_base_type.full_name } }
 {
     public
-{{ attribute_class_name }} ({ { for p in attribute_properties }}
-{{ p.property_type.full_name }}?
-{{ p.property_name }} = {{ p.default_value }}
-{{ if !for.last }}, {{ end}}
-{{ end }})
+{ { attribute_class_name } } ({ { for p in attribute_properties } }
+{ { p.property_type.full_name } }?
+{ { p.property_name } } = { { p.default_value } }
+{ { if !for.last } }, { { end} }
+{ { end } })
     {
-    {{ ~ for p in attribute_properties ~} }
-    this.{ { ~p.property_name } } = {{ p.property_name }} ?? {{ p.default_value }};
-    {{ ~end ~}}
+    { { ~ for p in attribute_properties ~} }
+    this.{ { ~p.property_name } } = { { p.property_name } } ?? { { p.default_value } };
+    { { ~end ~} }
 }
 
-{{ ~ for p in attribute_properties ~}}
+{ { ~ for p in attribute_properties ~} }
 public
-{{ p.property_type.full_name }}
-{{ p.property_name }}
+{ { p.property_type.full_name } }
+{ { p.property_name } }
 { get; set; }
-{{ ~end ~}}
+{ { ~end ~} }
 }
 """";
 public static readonly Scriban.Template AttributeDeclarationTemplate = Scriban.Template.Parse(AttributeDeclarationTemplateString);
