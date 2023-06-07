@@ -12,6 +12,7 @@
 namespace Microsoft.CodeAnalysis;
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.CSharp;
 
 internal static class RoslynExtensions
 {

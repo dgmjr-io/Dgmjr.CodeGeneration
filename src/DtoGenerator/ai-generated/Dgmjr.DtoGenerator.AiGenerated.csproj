@@ -1,28 +1,21 @@
-<!--
- * NamedTypeSymbolExtensions.csproj
- * 
- *   Created: 2023-05-03-04:17:05
- *   Modified: 2023-05-03-04:17:25
- * 
- *   Author: David G. Moore, Jr. <david@dgmjr.io>
- *   
- *   Copyright © 2022 - 2023 David G. Moore, Jr., All Rights Reserved
- *      License: MIT (https://opensource.org/licenses/MIT)
--->
-
-
-
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
+        <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" PrivateAssets="all" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
-        <PackageReference Include="Microsoft.CodeAnalysis.Common" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
-        <PackageReference Include="Dgmjr.System.Extensions" />
+        <PackageReference Include="Microsoft.CodeAnalysis.Common" />
+        <PackageReference Include="ThisAssembly.AssemblyInfo">
+          <GeneratePathProperty></GeneratePathProperty>
+          <CopyLocal></CopyLocal>
+          <IncludeAssets></IncludeAssets>
+          <ExcludeAssets></ExcludeAssets>
+        </PackageReference>
+        <PackageReference Include="Dgmjr.CodeGeneration.Extensions.TypeSymbolExtensions" />
     </ItemGroup>
 
     <ItemGroup>
@@ -35,6 +28,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageFile Include="$(OutputPath)\*.dll" PackagePath="analyzers/dotnet/cs/%(Filename)%(Extension)" Visible="false" />
+        <Content Include="$(OutputPath)/*.dll" PackagePath="analyzers/dotnet/cs/$(TargetFramework)/%(Filename)%(Extension)" Visible="false" />
     </ItemGroup>
 </Project>

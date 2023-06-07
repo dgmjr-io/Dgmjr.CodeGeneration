@@ -38,8 +38,8 @@ internal static class SyntaxNodeExtensions
         // Keep moving "out" of nested classes etc until we get to a namespace
         // or until we run out of parents
         while (potentialNamespaceParent != null &&
-               potentialNamespaceParent is not NamespaceDeclarationSyntax
-               && potentialNamespaceParent is not FileScopedNamespaceDeclarationSyntax)
+                potentialNamespaceParent is not NamespaceDeclarationSyntax
+                && potentialNamespaceParent is not FileScopedNamespaceDeclarationSyntax)
         {
             potentialNamespaceParent = potentialNamespaceParent.Parent;
         }

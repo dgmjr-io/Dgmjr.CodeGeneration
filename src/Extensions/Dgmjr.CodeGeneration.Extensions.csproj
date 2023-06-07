@@ -26,11 +26,9 @@
     <ProjectReference Include="./AttributeSymbolExtensions/Dgmjr.CodeGeneration.Extensions.AttributeSymbolExtensions.csproj" />
     <ProjectReference Include="./AttributeSyntaxExtensions/Dgmjr.CodeGeneration.Extensions.AttributeSyntaxExtensions.csproj" />
     <ProjectReference Include="./IncrementalGeneratorExtensions/Dgmjr.CodeGeneration.Extensions.IncrementalGeneratorExtensions.csproj" />
-    <ProjectReference Include="./ITypeSymbolExtensions/Dgmjr.CodeGeneration.Extensions.ITypeSymbolExtensions.csproj" />
-    <ProjectReference Include="./MemberDeclarationExtensions/Dgmjr.CodeGeneration.MemberDeclarationExtensions.csproj" />
     <ProjectReference Include="./PropertySymbolExtensions/Dgmjr.CodeGeneration.Extensions.PropertySymbolExtensions.csproj" />
     <ProjectReference Include="./StringExtensions/Dgmjr.CodeGeneration.Extensions.StringExtensions.csproj" />
     <ProjectReference Include="./SyntaxNodeExtensions/Dgmjr.CodeGeneration.Extensions.SyntaxNodeExtensions.csproj" />
-    <ProjectReference Include="./TypeSymbolExtensions/Dgmjr.CodeGeneration.Extensions.ITypeSymbolExtensions.csproj" />
+    <ProjectReference Include="./TypeSymbolExtensions/Dgmjr.CodeGeneration.Extensions.TypeSymbolExtensions.csproj" />
   </ItemGroup>
 </Project>

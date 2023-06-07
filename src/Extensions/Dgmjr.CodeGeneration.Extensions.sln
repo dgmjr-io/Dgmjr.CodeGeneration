@@ -1,5 +1,5 @@
 ﻿Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B283EBC2-E01F-412D-9339-FD56EF114549}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B283EBC2-E01F-412D-9339-FD56EF114549}" 
 	ProjectSection(SolutionItems) = preProject
 		..\..\..\..\Packages\Versions.props = ..\..\..\..\Packages\Versions.props
 		..\..\..\..\Packages\Versions.Local.json = ..\..\..\..\Packages\Versions.Local.json
@@ -40,6 +40,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\..\..\..\Packages\Packages\XmlDocMd.pkgs = ..\..\..\..\Packages\Packages\XmlDocMd.pkgs
 		..\..\..\..\Packages\Versions\AspNetCoreIdentity.props = ..\..\..\..\Packages\Versions\AspNetCoreIdentity.props
 		..\..\..\..\Packages\Versions\AutoMapper.props = ..\..\..\..\Packages\Versions\AutoMapper.props
+		..\..\..\..\Packages\Versions\CoreIntegratedLibs.props = ..\..\..\..\Packages\Versions\CoreIntegratedLibs.props
 		..\..\..\..\Packages\Versions\EFCore.props = ..\..\..\..\Packages\Versions\EFCore.props
 		..\..\..\..\Packages\Versions\JsonPatch.props = ..\..\..\..\Packages\Versions\JsonPatch.props
 		..\..\..\..\Packages\Versions\MediatR.props = ..\..\..\..\Packages\Versions\MediatR.props
