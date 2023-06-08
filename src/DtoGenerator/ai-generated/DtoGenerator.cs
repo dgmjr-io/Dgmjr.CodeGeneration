@@ -26,7 +26,7 @@ public partial class DtoGenerator : IIncrementalGenerator, ISourceGenerator
         context.RegisterPostInitializationOutput(context => context.AddSource(GenerateDtoAttributeFilename, GenerateDtoAttributeDeclaration));
 
         var validDtoDeclarations = context.SyntaxProvider.ForAttributeWithMetadataName(GenerateDtoAttributeName,
-            (syntax, _) => (syntax is ClassDeclarationSyntax cls || syntax is StructDeclarationSyntax @struct || syntax is InterfaceDeclarationSyntax @interface) && ((cls?.Modifiers.Any(mod => mod.IsKind(SyntaxKind.PartialKeyword)) ?? false) || @struct.Modifiers.Any(mod => mod.IsKind(SyntaxKind.PartialKeyword))),
+            (syntax, _) => (syntax is ClassDeclarationSyntax cls || syntax is StructDeclarationSyntax @struct || syntax is InterfaceDeclarationSyntax @interface) && ((cls?.Modifiers.Any(mod => mod.IsKind(SyntaxKind.PartialKeyword)) ?? false) || @struct?.Modifiers.Any(mod => mod.IsKind(SyntaxKind.PartialKeyword))),
             transform: (ctx, _) => (ctx.TargetNode is ClassDeclarationSyntax cls ? cls.WithAttributeLists(SyntaxFactory.List<AttributeListSyntax>())
                                     : ctx.TargetNode is StructDeclarationSyntax @struct ? @struct.WithAttributeLists(SyntaxFactory.List<AttributeListSyntax>())
                                     : ctx.TargetNode is InterfaceDeclarationSyntax @interface ? @interface.WithAttributeLists(SyntaxFactory.List<AttributeListSyntax>()) :
@@ -182,8 +182,7 @@ public partial class DtoGenerator : IIncrementalGenerator, ISourceGenerator
             .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.ProtectedKeyword), SyntaxFactory.Token(SyntaxKind.OverrideKeyword)))
             .WithParameterList(SyntaxFactory.ParameterList(SyntaxFactory.SingletonSeparatedList(SyntaxFactory.Parameter(SyntaxFactory.Identifier("configuration"))
                 .WithType(SyntaxFactory.ParseTypeName("IProfileExpression")))))
-            .WithBody(SyntaxFactory.Block(new StatementSyntax[]
-            {
+            .WithBody(SyntaxFactory.Block(
             SyntaxFactory.ExpressionStatement(SyntaxFactory.InvocationExpression(
                 SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
                     SyntaxFactory.IdentifierName("configuration"),
@@ -194,7 +193,7 @@ public partial class DtoGenerator : IIncrementalGenerator, ISourceGenerator
                     SyntaxFactory.Token(SyntaxKind.CommaToken),
                     SyntaxFactory.Argument(dtoTypeSyntax)
                 }))))
-            }));
+            ));
 
         return mappingMethod;
     }
@@ -207,8 +206,7 @@ public partial class DtoGenerator : IIncrementalGenerator, ISourceGenerator
             .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.ProtectedKeyword), SyntaxFactory.Token(SyntaxKind.OverrideKeyword)))
             .WithParameterList(SyntaxFactory.ParameterList(SyntaxFactory.SingletonSeparatedList(SyntaxFactory.Parameter(SyntaxFactory.Identifier("configuration"))
                 .WithType(SyntaxFactory.ParseTypeName("IProfileExpression")))))
-            .WithBody(SyntaxFactory.Block(new StatementSyntax[]
-            {
+            .WithBody(SyntaxFactory.Block(
             SyntaxFactory.ExpressionStatement(SyntaxFactory.InvocationExpression(
                 SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
                     SyntaxFactory.IdentifierName("configuration"),
@@ -219,7 +217,7 @@ public partial class DtoGenerator : IIncrementalGenerator, ISourceGenerator
                     SyntaxFactory.Token(SyntaxKind.CommaToken),
                     SyntaxFactory.Argument(sourceTypeSyntax)
                 }))))
-            }));
+            ));
 
         return mappingMethod;
     }
