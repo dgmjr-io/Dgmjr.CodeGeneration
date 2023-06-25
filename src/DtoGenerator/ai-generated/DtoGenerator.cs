@@ -26,7 +26,7 @@ public partial class DtoGenerator : IIncrementalGenerator, ISourceGenerator
         context.RegisterPostInitializationOutput(context => context.AddSource(GenerateDtoAttributeFilename, GenerateDtoAttributeDeclaration));
 
         var validDtoDeclarations = context.SyntaxProvider.ForAttributeWithMetadataName(GenerateDtoAttributeName,
-            (syntax, _) => (syntax is ClassDeclarationSyntax cls || syntax is StructDeclarationSyntax @struct || syntax is InterfaceDeclarationSyntax @interface) && ((cls?.Modifiers.Any(mod => mod.IsKind(SyntaxKind.PartialKeyword)) ?? false) || @struct?.Modifiers.Any(mod => mod.IsKind(SyntaxKind.PartialKeyword))),
+            (syntax, _) => (syntax is ClassDeclarationSyntax cls || syntax is StructDeclarationSyntax @struct || syntax is InterfaceDeclarationSyntax @interface) && ((cls?.Modifiers.Any(mod => mod.IsKind(SyntaxKind.PartialKeyword)) == true) || @struct?.Modifiers.Any(mod => mod.IsKind(SyntaxKind.PartialKeyword))),
             transform: (ctx, _) => (ctx.TargetNode is ClassDeclarationSyntax cls ? cls.WithAttributeLists(SyntaxFactory.List<AttributeListSyntax>())
                                     : ctx.TargetNode is StructDeclarationSyntax @struct ? @struct.WithAttributeLists(SyntaxFactory.List<AttributeListSyntax>())
                                     : ctx.TargetNode is InterfaceDeclarationSyntax @interface ? @interface.WithAttributeLists(SyntaxFactory.List<AttributeListSyntax>()) :
