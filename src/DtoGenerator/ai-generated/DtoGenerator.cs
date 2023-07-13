@@ -1,3 +1,6 @@
+using System.Reflection.Metadata.Ecma335;
+using System.Net.Security;
+using System.Collections.Immutable;
 using System.Reflection;
 using System.Runtime.InteropServices.ComTypes;
 using Microsoft.VisualBasic;
@@ -10,51 +13,50 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
+using System.Threading;
 
 namespace Dgmjr.DtoGenerator.AiGenerated;
 
 [Generator]
-public partial class DtoGenerator : IIncrementalGenerator, ISourceGenerator
+public partial class DtoGenerator : IIncrementalGenerator
 {
-    public void Initialize(GeneratorInitializationContext context)
-    {
-        // No initialization required
-    }
-
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         context.RegisterPostInitializationOutput(context => context.AddSource(GenerateDtoAttributeFilename, GenerateDtoAttributeDeclaration));
 
         var validDtoDeclarations = context.SyntaxProvider.ForAttributeWithMetadataName(GenerateDtoAttributeName,
-            (syntax, _) => (syntax is ClassDeclarationSyntax cls || syntax is StructDeclarationSyntax @struct || syntax is InterfaceDeclarationSyntax @interface) && ((cls?.Modifiers.Any(mod => mod.IsKind(SyntaxKind.PartialKeyword)) == true) || @struct?.Modifiers.Any(mod => mod.IsKind(SyntaxKind.PartialKeyword))),
-            transform: (ctx, _) => (ctx.TargetNode is ClassDeclarationSyntax cls ? cls.WithAttributeLists(SyntaxFactory.List<AttributeListSyntax>())
-                                    : ctx.TargetNode is StructDeclarationSyntax @struct ? @struct.WithAttributeLists(SyntaxFactory.List<AttributeListSyntax>())
-                                    : ctx.TargetNode is InterfaceDeclarationSyntax @interface ? @interface.WithAttributeLists(SyntaxFactory.List<AttributeListSyntax>()) :
-                                    null));
+            IsEligibleType,
+            (context, _) => context).Collect();
+
+        context.RegisterSourceOutput(validDtoDeclarations, GenerateDtos);
     }
 
-    public void Execute(GeneratorExecutionContext context)
+    private static bool IsPartialType(SyntaxNode node)
     {
-        var compilation = context.Compilation;
+        return node is ClassDeclarationSyntax cls && cls.Modifiers.Any(mod => mod.IsKind(SyntaxKind.PartialKeyword))
+            || node is StructDeclarationSyntax @struct && @struct.Modifiers.Any(mod => mod.IsKind(SyntaxKind.PartialKeyword))
+            || node is InterfaceDeclarationSyntax @interface && @interface.Modifiers.Any(mod => mod.IsKind(SyntaxKind.PartialKeyword));
+    }
 
-        // Get all types decorated with the GenerateDtoAttribute
-        var generateDtoAttributeSymbol = compilation.GetTypeByMetadataName(GenerateDtoAttributeName);
-        var generateDtoTypes = compilation.SyntaxTrees
-            .SelectMany(tree => tree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().Concat(tree.GetRoot().DescendantNodes().OfType<StructDeclarationSyntax>().Concat(tree.GetRoot().DescendantNodes().OfType<InterfaceDeclarationSyntax>()))
-            .Where(@type => @type.GetAttribute(GenerateDtoAttributeName) != null)
-            .GenerateDtoType(compilation, generateDtoAttributeSymbol));
+    private static bool IsEligibleType(SyntaxNode node, CancellationToken _ = default)
+    {
+        return IsPartialType(node) && node.GetAttribute(GenerateDtoAttributeName) != null;
+    }
+
+    private static void GenerateDtos(SourceProductionContext context, ImmutableArray<GeneratorAttributeSyntaxContext> generateDtoTypes)
+    {
         // Generate code for each type
         foreach (var generateDtoType in generateDtoTypes)
         {
-            var dtoAttribute = generateDtoType.GetAttributes().Single(attr => attr.AttributeClass.Equals(generateDtoAttributeSymbol, SymbolEqualityComparer.Default));
+            var dtoAttribute = generateDtoType.TargetSymbol.GetAttributes().Single(attr => attr.AttributeClass.MetadataName.Equals(GenerateDtoAttributeName));
             var dtoType = dtoAttribute.NamedArguments.SingleOrDefault(arg => arg.Key == "dtoType").Value.Value as string ?? "Dto";
             var typeType = dtoAttribute.NamedArguments.SingleOrDefault(arg => arg.Key == "typeType").Value.Value as string ?? "RecordStruct";
-            var typeName = dtoAttribute.NamedArguments.SingleOrDefault(arg => arg.Key == "typeName").Value.Value as string ?? $"{generateDtoType.Name}{dtoType}";
-            var @namespace = dtoAttribute.NamedArguments.SingleOrDefault(arg => arg.Key == "@namespace").Value.Value as string ?? $"{generateDtoType.ContainingNamespace}.Dtos";
+            var typeName = dtoAttribute.NamedArguments.SingleOrDefault(arg => arg.Key == "typeName").Value.Value as string ?? $"{generateDtoType.TargetSymbol.Name}{dtoType}";
+            var @namespace = dtoAttribute.NamedArguments.SingleOrDefault(arg => arg.Key == "@namespace").Value.Value as string ?? $"{generateDtoType.TargetSymbol.ContainingNamespace}.Dtos";
 
-            if (generateDtoType.TypeKind == TypeKind.Interface || generateDtoType.TypeKind == TypeKind.Enum)
+            if ((generateDtoType.TargetSymbol as INamedTypeSymbol)?.TypeKind is /*TypeKind.Interface or*/ TypeKind.Enum)
             {
-                context.ReportDiagnostic(Diagnostic.Create(new DiagnosticDescriptor("DTO001", "Invalid type", "GenerateDtoAttribute can only decorate classes and structs", "Code", DiagnosticSeverity.Error, true), generateDtoType.Locations.First()));
+                context.ReportDiagnostic(Diagnostic.Create(new DiagnosticDescriptor("DTO001", "Invalid type", "GenerateDtoAttribute can only decorate classes and structs", "Code", DiagnosticSeverity.Error, true), Location.Create(generateDtoType.TargetNode.SyntaxTree, generateDtoType.TargetNode.Span)));
                 continue;
             }
 
@@ -220,5 +222,19 @@ public partial class DtoGenerator : IIncrementalGenerator, ISourceGenerator
             ));
 
         return mappingMethod;
+    }
+}
+
+internal static class SyntaxNodeExtensions
+{
+    public static AttributeSyntax? GetAttribute(this SyntaxNode syntaxNode, string attributeMetadataName)
+    {
+        var attributeLists =
+            (syntaxNode is BaseTypeDeclarationSyntax tds ? (SyntaxList<AttributeListSyntax>)tds.AttributeLists :
+            (syntaxNode is BaseFieldDeclarationSyntax fds ? (SyntaxList<AttributeListSyntax>)fds.AttributeLists :
+            (syntaxNode is BaseMethodDeclarationSyntax mds ? (SyntaxList<AttributeListSyntax>)mds.AttributeLists :
+            (syntaxNode is BasePropertyDeclarationSyntax pds ? (SyntaxList<AttributeListSyntax>)pds.AttributeLists :
+            SyntaxFactory.List<AttributeListSyntax>()))));
+        return attributeLists.SelectMany(x => x.Attributes).FirstOrDefault(x => x.Name.ToString() == attributeMetadataName);
     }
 }

@@ -7,10 +7,10 @@
         "https://taskfile.dev/schema.json": "file://Users/david/GitHub/Dgmjr/src/Types/.vscode/taskfile.yml"
     },
     "files.exclude": {
-        "obj": false,
-        "bin": false
+        "obj": true,
+        "bin": true
     },
-    "workspace.isHidden": false,
+    "workspace.isHidden": true,
     "runOnSave.shell": "pwsh",
     "runOnSave.commands": [
         {

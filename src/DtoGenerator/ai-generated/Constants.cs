@@ -20,8 +20,24 @@ public partial class DtoGenerator
 [global::System.CodeDom.Compiler.GeneratedCodeAttribute((""{ThisAssembly.Info.Title}"", ""{ThisAssembly.Info.Version}"")]
 public sealed class GenerateDtoAttribute : global::System.Attribute
 {{
-    public GenerateDtoAttribute()
+    public GenerateDtoAttribute(DtoType dtoType = DtoType.Dto, TypeType typeType = TypeType.RecordStruct, string? typeName = null, string? @namespace = null)
     {{
     }}
-}}";
+}}
+
+DtoType
+{{
+    Dto,
+    Insert,
+    Edit
+}}
+
+TypeType
+{{
+    RecordStruct,
+    RecordClass,
+    Class,
+    Struct
+}}
+";
 }

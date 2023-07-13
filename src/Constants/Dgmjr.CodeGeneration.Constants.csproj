@@ -23,11 +23,11 @@
     <Compile Remove="$(MSBuildThisFileDirectory)Resources/**/*" />
     <!-- <Compile Include="../Scriban/src/Scriban/**/*.cs" /> -->
     <!-- <EmbeddedResource Include="$(MSBuildThisFileDirectory)/Resources/**/*" LogicalName="%(Filename)%(Extension)" /> -->
-    <PackageReference Include="System.Threading.Tasks.Extensions" VersionOverride="4.5.4" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" />
     <!-- <Compile Remove="../Scriban/src/Scriban/**/Scriban.AssemblyInfo.cs" /> -->
     <!-- <Compile Remove="../Scriban/src/Scriban/**/*.AssemblyAttributes.cs" /> -->
-    <PackageReference Include="Microsoft.CSharp" VersionOverride="4.7.0" />
-    <PackageReference Include="Scriban.Signed" />
+    <PackageReference Include="Microsoft.CSharp" />
+    <PackageReference Include="Scriban.Signed" PrivateAssets="All" />
   </ItemGroup>
   <!-- <Import Project="$(MSBuildThisFileDirectory)Include.items" /> -->
 </Project>

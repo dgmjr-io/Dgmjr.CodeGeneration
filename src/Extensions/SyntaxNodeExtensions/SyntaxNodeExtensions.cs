@@ -13,6 +13,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Editing;
 
 // ReSharper disable once CheckNamespace
 namespace Microsoft.CodeAnalysis;
@@ -129,5 +130,16 @@ internal static class SyntaxNodeExtensions
     public static T? FindDescendantNode<T>(this SyntaxNode syntaxNode, Func<T, bool>? predicate = null) where T : SyntaxNode
     {
         return syntaxNode.DescendantNodes().OfType<T>().FirstOrDefault(x => predicate == null || predicate(x));
+    }
+
+    public static AttributeSyntax? GetAttribute(this SyntaxNode syntaxNode, string attributeMetadataName)
+    {
+        var attributeLists =
+            (syntaxNode is BaseTypeDeclarationSyntax tds ? (SyntaxList<AttributeListSyntax>)tds.AttributeLists :
+            (syntaxNode is BaseFieldDeclarationSyntax fds ? (SyntaxList<AttributeListSyntax>)fds.AttributeLists :
+            (syntaxNode is BaseMethodDeclarationSyntax mds ? (SyntaxList<AttributeListSyntax>)mds.AttributeLists :
+            (syntaxNode is BasePropertyDeclarationSyntax pds ? (SyntaxList<AttributeListSyntax>)pds.AttributeLists :
+            SyntaxFactory.List<AttributeListSyntax>()))));
+        return attributeLists.SelectMany(x => x.Attributes).FirstOrDefault(x => x.Name.ToString() == attributeMetadataName);
     }
 }
