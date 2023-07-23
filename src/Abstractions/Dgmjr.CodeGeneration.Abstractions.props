@@ -18,5 +18,6 @@
   </ItemGroup>
   <ItemGroup>
     <Using Include="Dgmjr.CodeGeneration.Abstractions" />
+    <Using Include="System.Collections.Generic" />
   </ItemGroup>
 </Project>

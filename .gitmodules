@@ -4,3 +4,6 @@
 [submodule "lib/Scriban"]
 	path = lib/Scriban
 	url = https://github.com//Scriban/Scriban.git
+[submodule "src/DtoGenerator"]
+	path = src/DtoGenerator
+	url = https://github.com/dgmjr-io/DtoGenerator.git

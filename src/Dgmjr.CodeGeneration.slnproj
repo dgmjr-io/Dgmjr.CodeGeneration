@@ -15,7 +15,7 @@
     <IncludeInSolutionFile>false</IncludeInSolutionFile>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="./Scriban/src/Scriban.Signed/Scriban.Signed.csproj" />
+    <!-- <ProjectReference Include="./Scriban/src/Scriban.Signed/Scriban.Signed.csproj" /> -->
     <ProjectReference Include="./Abstractions/Dgmjr.CodeGeneration.Abstractions.csproj" />
     <ProjectReference Include="./Constants/Dgmjr.CodeGeneration.Constants.csproj" />
     <ProjectReference Include="./DtoGenerator/Dgmjr.CodeGeneration.DtoGenerator.csproj" />
