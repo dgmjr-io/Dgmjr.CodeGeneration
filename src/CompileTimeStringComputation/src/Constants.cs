@@ -51,20 +51,22 @@ using System.Runtime.CompilerServices;
 
     public const string CompileTimeComputationClassDeclaration =
     $$$"""
-    {{{GeneratedCodeAttributes}}}
-    internal sealed class {{{CompileTimeComputationOfT}}}
+    {{{GeneratedCodeAttributes
+}
+}}
+    internal sealed class {{ { CompileTimeComputationOfT} }}
     {
-        public CompileTimeComputation(string name, Func<T> compute, bool isPublic = true)
-        {
-            Name = name;
-            Compute = compute;
-            IsPublic = isPublic;
-        }
+    public CompileTimeComputation(string name, Func<T> compute, bool isPublic = true)
+    {
+        Name = name;
+        Compute = compute;
+        IsPublic = isPublic;
+    }
 
 
         public string Name { get; }
-        public Func<T> Compute { get; }
-        public bool IsPublic { get; }
+public Func<T> Compute { get; }
+public bool IsPublic { get; }
     }
     """;
 }
