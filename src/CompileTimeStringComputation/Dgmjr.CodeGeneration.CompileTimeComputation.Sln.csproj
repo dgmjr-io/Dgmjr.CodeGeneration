@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <Sdk Name="MetapackageSdk" />
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="./src/Dgmjr.CodeGeneration.CompileTimeComputation.csproj" />
+        <ProjectReference Include="./Samples/Dgmjr.CodeGeneration.CompileTimeComputation.Samples.csproj" />
+    </ItemGroup>
+</Project>

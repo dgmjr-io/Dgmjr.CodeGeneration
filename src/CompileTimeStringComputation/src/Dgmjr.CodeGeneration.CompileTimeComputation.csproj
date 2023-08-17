@@ -1,0 +1,35 @@
+
+
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+        <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
+        <PackageReference Include="Microsoft.CodeAnalysis.Common" />
+        <PackageReference Include="Scriban.Signed" />
+        <!-- <PackageReference Include="System.Text.Json" />
+        <PackageReference Include="System.CodeDom" /> -->
+        <PackageReference Include="ThisAssembly.Project" />
+        <PackageReference Include="ThisAssembly.AssemblyInfo" />
+    </ItemGroup>
+    <ItemGroup>
+        <NoWarn Include="RS1035" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Remove="./Resources/*" />
+        <EmbeddedResource Include="./Resources/**/*" />
+    </ItemGroup>
+
+    <PropertyGroup>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageFile Include="$(OutputPath)\*.dll" PackagePath="analyzers/dotnet/cs/%(Filename)%(Extension)" Visible="false" />
+    </ItemGroup>
+</Project>

@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Dgmjr.CodeGeneration.CompileTimeComputation" IncludeAssets="Analyzers;Build" ExcludeAssets="Content;Compile;Runtime" />
+        <PackageReference Include="System.Security.Cryptography.Algorithms" />
+        <PackageReference Include="Dgmjr.System.Extensions" />
+    </ItemGroup>
+</Project>
