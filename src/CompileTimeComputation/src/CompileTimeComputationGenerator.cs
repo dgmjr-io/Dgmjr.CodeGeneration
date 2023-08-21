@@ -63,79 +63,90 @@ public class CompileTimeComputationGenerator : IIncrementalGenerator
                 var constDeclaration =
                 HeaderTemplate.Render(new { Filename = filename }) +
                 $$$"""
-                    namespace {{{fieldSymbol.ContainingType.ContainingNamespace.ToDisplayString()}}};
+                    namespace {{{fieldSymbol.ContainingType.ContainingNamespace.ToDisplayString() }
+}};
 
-                    public {{{(fieldSymbol.ContainingType.IsStatic ? "static" : "")}}} partial {{{(fieldSymbol.ContainingType.IsRecord ? "record" : "")}}} {{{(fieldSymbol.ContainingType.TypeKind == TypeKind.Class ? "class" : fieldSymbol.ContainingType.TypeKind == TypeKind.Struct ? "struct" : $"#error Wrong data structure type: {fieldSymbol.ContainingType.TypeKind}")}}} {{{fieldSymbol.ContainingType.Name}}}
-                    {
-                        public const {{{fieldSymbol.ToDisplayString()}}} {{{name}}} = {{{(fieldType.Name.Equals("string", InvariantCultureIgnoreCase) ? "\"" : "")}}} {{{funcResult}}} {{{(fieldSymbol.Name.Equals("string", InvariantCultureIgnoreCase) ? "\"" : "")}}};
+public
+{ { { (fieldSymbol.ContainingType.IsStatic ? "static" : "")} } }
+partial
+{ { { (fieldSymbol.ContainingType.IsRecord ? "record" : "")} } }
+{ { { (fieldSymbol.ContainingType.TypeKind == TypeKind.Class ? "class" : fieldSymbol.ContainingType.TypeKind == TypeKind.Struct ? "struct" : $"#error Wrong data structure type: {fieldSymbol.ContainingType.TypeKind}")} } }
+{ { { fieldSymbol.ContainingType.Name} } }
+{
+                        public const { { { fieldSymbol.ToDisplayString()} } }
+{ { { name} } } = { { { (fieldType.Name.Equals("string", InvariantCultureIgnoreCase) ? "\"" : "")} } }
+{ { { funcResult} } }
+{ { { (fieldSymbol.Name.Equals("string", InvariantCultureIgnoreCase) ? "\"" : "")} } };
                     }
                     """;
 
                 // Add the class and const variable declarations to the compilation
-                context.AddSource(filename, constDeclaration);
+context.AddSource(filename, constDeclaration);
             }
             else
-            {
-                context.ReportDiagnostic(Diagnostic.Create(new DiagnosticDescriptor("CTCG002", "Error generatimg compile-time computed constant: must be const-able",
-                Format(CTCG002ErrorMessage, fieldSymbolDisplay),
-                "CTCG002: Field must be const-able", DiagnosticSeverity.Error, true),
-                fieldSymbol.Locations.FirstOrDefault()));
-            }
+{
+    context.ReportDiagnostic(Diagnostic.Create(new DiagnosticDescriptor("CTCG002", "Error generatimg compile-time computed constant: must be const-able",
+    Format(CTCG002ErrorMessage, fieldSymbolDisplay),
+    "CTCG002: Field must be const-able", DiagnosticSeverity.Error, true),
+    fieldSymbol.Locations.FirstOrDefault()));
+}
         }
     }
 
     private static object CompileAndRunFunc(SourceProductionContext context, Compilation compilation, INamedTypeSymbol returnType, IFieldSymbol fieldSymbol)
+{
+    try
     {
-        try
-        {
-            var programClassName = $"Program_{guid.NewGuid().ToString().Substring(0, 4)}";
-            var code =
+        var programClassName = $"Program_{guid.NewGuid().ToString().Substring(0, 4)}";
+        var code =
             $$$"""
             using System;
-            public class {{{programClassName}}}
+            public class {{ { programClassName} }}
             {
-                public static {{{returnType.ToDisplayString()}}} Run()
+                public static
+{ { { returnType.ToDisplayString()} } }
+Run()
                 {
-                    return {{{fieldSymbol.ContainingType.ToDisplayString()}}}.{{{fieldSymbol.Name}}}.Compute();
-                }
+    return { { { fieldSymbol.ContainingType.ToDisplayString()} } }.{ { { fieldSymbol.Name} } }.Compute();
+}
             }
             """;
 
             var parseOptions = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.Preview);
-            var syntaxTree = CSharpSyntaxTree.ParseText(code, parseOptions);
+var syntaxTree = CSharpSyntaxTree.ParseText(code, parseOptions);
 
-            compilation = compilation.AddSyntaxTrees(syntaxTree)
-                .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary))
-                .AddReferences(MetadataReference.CreateFromFile(typeof(object).Assembly.Location));
+compilation = compilation.AddSyntaxTrees(syntaxTree)
+    .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary))
+    .AddReferences(MetadataReference.CreateFromFile(typeof(object).Assembly.Location));
 
-            using var peStream = new MemoryStream();
-            using var pdbSream = new MemoryStream();
-            var assembly = compilation.Emit(peStream, pdbSream, options: new EmitOptions(false, DebugInformationFormat.Pdb, tolerateErrors: true, includePrivateMembers: true, pdbChecksumAlgorithm: HashAlgorithmName.SHA512), cancellationToken: default);
-            if (assembly.Success)
-            {
-                peStream.Flush();
+using var peStream = new MemoryStream();
+using var pdbSream = new MemoryStream();
+var assembly = compilation.Emit(peStream, pdbSream, options: new EmitOptions(false, DebugInformationFormat.Pdb, tolerateErrors: true, includePrivateMembers: true, pdbChecksumAlgorithm: HashAlgorithmName.SHA512), cancellationToken: default);
+if (assembly.Success)
+{
+    peStream.Flush();
 
-                var dynamicAssembly = Assembly.Load(peStream.GetBuffer());
-                var programType = dynamicAssembly.GetType(programClassName);
-                var methodInfo = programType.GetMethod("Run");
+    var dynamicAssembly = Assembly.Load(peStream.GetBuffer());
+    var programType = dynamicAssembly.GetType(programClassName);
+    var methodInfo = programType.GetMethod("Run");
 
-                return methodInfo.Invoke(null, null);
-            }
-            else
-            {
-                foreach (var diagnostic in assembly.Diagnostics)
-                {
-                    context.ReportDiagnostic(diagnostic);
-                }
-            }
+    return methodInfo.Invoke(null, null);
+}
+else
+{
+    foreach (var diagnostic in assembly.Diagnostics)
+    {
+        context.ReportDiagnostic(diagnostic);
+    }
+}
         }
         catch (Exception ex)
-        {
-            RegisterPostInitializationOutput(ctx => ctx.AddSource("error.g.cs", $@"/*
+{
+    RegisterPostInitializationOutput(ctx => ctx.AddSource("error.g.cs", $@"/*
 {ex.GetType()}: {ex.Message}
 {ex.StackTrace}
 */"));
-        }
-        return "NO RESULT";
+}
+return "NO RESULT";
     }
 }

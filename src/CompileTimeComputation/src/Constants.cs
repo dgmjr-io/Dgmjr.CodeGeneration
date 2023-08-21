@@ -52,17 +52,20 @@ using System.Runtime.CompilerServices;
 
     public const string CompileTimeComputationClassDeclaration =
     $$$"""
-    {{{GeneratedCodeAttributes}}}
+    {{{GeneratedCodeAttributes
+}
+}}
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Property)]
-    public sealed class {{{CompileTimeComputationOfT}}} : Attribute
-    {
-        public {{{CompileTimeComputation}}}(string name)
+public sealed class {{ { CompileTimeComputationOfT} }} : Attribute
+{
+        public
+{ { { CompileTimeComputation} } } (string name)
         {
-            Name = name;
-        }
+    Name = name;
+}
 
 
-        public string Name { get; }
+public string Name { get; }
     }
     """;
 }
