@@ -66,24 +66,33 @@ public class CompileTimeComputationGenerator : IIncrementalGenerator
                 var constDeclaration =
                 HeaderTemplate.Render(new { Filename = filename }) +
                 $$$"""
-                    namespace {{{fieldSymbol.ContainingType.ContainingNamespace.ToDisplayString()}}};
+                    namespace {{{fieldSymbol.ContainingType.ContainingNamespace.ToDisplayString() }
+}};
 
-                    {{{fieldSymbol.ContainingType.DeclaredAccessibility.ToString().ToLower().Replace("or", " ").Replace("and", " ")}}} {{{(fieldSymbol.ContainingType.IsStatic ? "static" : "")}}} partial {{{(fieldSymbol.ContainingType.IsRecord ? "record" : "")}}} {{{(fieldSymbol.ContainingType.TypeKind == TypeKind.Class ? "class" : fieldSymbol.ContainingType.TypeKind == TypeKind.Struct ? "struct" : $"#error Wrong data structure type: {fieldSymbol.ContainingType.TypeKind}")}}} {{{fieldSymbol.ContainingType.Name}}}
-                    {
-                        public const {{{fieldSymbol.ToDisplayString()}}} {{{name}}} = {{{(fieldType.Name.Equals(nameof(String), InvariantCultureIgnoreCase) ? "\"" : "")}}}{{{funcResult}}}{{{(fieldSymbol.Name.Equals(nameof(String), InvariantCultureIgnoreCase) ? "\"" : "")}}};
+{ { { fieldSymbol.ContainingType.DeclaredAccessibility.ToString().ToLower().Replace("or", " ").Replace("and", " ")} } }
+{ { { (fieldSymbol.ContainingType.IsStatic ? "static" : "")} } }
+partial
+{ { { (fieldSymbol.ContainingType.IsRecord ? "record" : "")} } }
+{ { { (fieldSymbol.ContainingType.TypeKind == TypeKind.Class ? "class" : fieldSymbol.ContainingType.TypeKind == TypeKind.Struct ? "struct" : $"#error Wrong data structure type: {fieldSymbol.ContainingType.TypeKind}")} } }
+{ { { fieldSymbol.ContainingType.Name} } }
+{
+                        public const { { { fieldSymbol.ToDisplayString()} } }
+{ { { name} } } = { { { (fieldType.Name.Equals(nameof(String), InvariantCultureIgnoreCase) ? "\"" : "")} } }
+{ { { funcResult} } }
+{ { { (fieldSymbol.Name.Equals(nameof(String), InvariantCultureIgnoreCase) ? "\"" : "")} } };
                     }
                     """;
 
                 // Add the class and const variable declarations to the compilation
-                context.AddSource(filename, constDeclaration);
+context.AddSource(filename, constDeclaration);
             }
             else
-            {
-                context.ReportDiagnostic(Diagnostic.Create(new DiagnosticDescriptor("CTCG002", "Error generatimg compile-time computed constant: must be const-able",
-                Format(CTCG002ErrorMessage, fieldSymbolDisplay),
-                "CTCG002: Field must be const-able", DiagnosticSeverity.Error, true),
-                fieldSymbol.Locations.FirstOrDefault()));
-            }
+{
+    context.ReportDiagnostic(Diagnostic.Create(new DiagnosticDescriptor("CTCG002", "Error generatimg compile-time computed constant: must be const-able",
+    Format(CTCG002ErrorMessage, fieldSymbolDisplay),
+    "CTCG002: Field must be const-able", DiagnosticSeverity.Error, true),
+    fieldSymbol.Locations.FirstOrDefault()));
+}
         }
     }
 }
