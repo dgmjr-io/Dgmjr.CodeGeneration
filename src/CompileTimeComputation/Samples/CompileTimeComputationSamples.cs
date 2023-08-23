@@ -17,6 +17,12 @@ public static partial class Foo
 
 public static partial class Foo
 {
+    static Foo()
+    {
+        var workspace = new AdhocWorkspace();
+        var project = workspace.AddProject("Foo", "C#");
+
+    }
 }
 
 // public sealed class CompileTimeComputationAttribute<T> : Attribute

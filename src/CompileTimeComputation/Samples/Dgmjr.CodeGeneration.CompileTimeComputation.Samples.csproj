@@ -8,5 +8,7 @@
         <!-- <ProjectReference Include="../src/Dgmjr.CodeGeneration.CompileTimeComputation.csproj" OutputItemType="Anayzer" ReferenceOutputAssembly="false" /> -->
         <PackageReference Include="System.Security.Cryptography.Algorithms" />
         <PackageReference Include="Dgmjr.System.Extensions" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
+        <PackageReference Include="Microsoft.CodeAnalysis.Common" />
     </ItemGroup>
 </Project>
