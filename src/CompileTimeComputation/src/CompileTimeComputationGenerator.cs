@@ -5,7 +5,7 @@ using System.Collections.Immutable;
 using System.Reflection;
 using System.Security.Cryptography;
 
-using Dgmjr.CodeGeneration.MethodSymbolExtensions;
+using Dgmjr.CodeGeneration.MemberSymbolExtensions;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -24,7 +24,7 @@ public class CompileTimeComputationGenerator : IIncrementalGenerator
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         RegisterPostInitializationOutput = context.RegisterPostInitializationOutput;
-        RegisterPostInitializationOutput(ctx => ctx.AddSource($"{CompileTimeComputation}.g.cs",
+        context.RegisterPostInitializationOutput(ctx => ctx.AddSource($"{CompileTimeComputation}.g.cs",
             HeaderTemplate.Render(new { Filename = $"{CompileTimeComputation}.g.cs" }) +
             CompileTimeComputationClassDeclaration));
         // Register the generator for syntax notifications
@@ -48,16 +48,19 @@ public class CompileTimeComputationGenerator : IIncrementalGenerator
 
     public static void Execute(SourceProductionContext context, (ImmutableArray<FieldDeclaration> FieldDeclarations, Compilation Compilation) contexts)
     {
-        var compilation = contexts.Compilation;
-        foreach (var (property, method, name, fieldSymbol, fieldType) in contexts.FieldDeclarations)
+        var (fieldDeclarations, compilation) = contexts;
+        context.ReportDiagnostic(Diagnostic.Create(new DiagnosticDescriptor("DEBUG01", "", $"DEBUG(compilation.GetDiagnostics().Length): *{compilation.GetDiagnostics().Length}*", "DEBUG", DiagnosticSeverity.Warning, true), null));
+        context.ReportDiagnostic(Diagnostic.Create(new DiagnosticDescriptor("DEBUG02", "", $"DEBUG(fieldDeclarations.Count()): *{fieldDeclarations.Length}*", "DEBUG", DiagnosticSeverity.Warning, true), null));
+        foreach (var (property, method, name, fieldSymbol, fieldType) in fieldDeclarations)
         {
             // Get the field type and name
             var fieldSymbolDisplay = $"{fieldType.ToDisplayString()}: {fieldType.GetType()}";
+            context.ReportDiagnostic(Diagnostic.Create(new DiagnosticDescriptor("DEBUG03", $"DEBUG/fieldSymbolDisplay: {fieldSymbolDisplay}", "", "DEBUG", DiagnosticSeverity.Warning, true), null));
 
             if (ValidConstTypeNames.Contains(fieldType?.Name, StringComparer.InvariantCultureIgnoreCase))
             {
                 // create the const variable expresion
-                var funcResult = method.InvokeMethod(compilation, null!);
+                var funcResult = method.InvokeStaticMethod(compilation);
                 var filename = $"CompileTimeComputation.{method.ContainingType}.{name}.g.cs";
 
                 var constDeclaration =
@@ -65,9 +68,9 @@ public class CompileTimeComputationGenerator : IIncrementalGenerator
                 $$$"""
                     namespace {{{fieldSymbol.ContainingType.ContainingNamespace.ToDisplayString()}}};
 
-                    public {{{(fieldSymbol.ContainingType.IsStatic ? "static" : "")}}} partial {{{(fieldSymbol.ContainingType.IsRecord ? "record" : "")}}} {{{(fieldSymbol.ContainingType.TypeKind == TypeKind.Class ? "class" : fieldSymbol.ContainingType.TypeKind == TypeKind.Struct ? "struct" : $"#error Wrong data structure type: {fieldSymbol.ContainingType.TypeKind}")}}} {{{fieldSymbol.ContainingType.Name}}}
+                    {{{fieldSymbol.ContainingType.DeclaredAccessibility.ToString().ToLower().Replace("or", " ").Replace("and", " ")}}} {{{(fieldSymbol.ContainingType.IsStatic ? "static" : "")}}} partial {{{(fieldSymbol.ContainingType.IsRecord ? "record" : "")}}} {{{(fieldSymbol.ContainingType.TypeKind == TypeKind.Class ? "class" : fieldSymbol.ContainingType.TypeKind == TypeKind.Struct ? "struct" : $"#error Wrong data structure type: {fieldSymbol.ContainingType.TypeKind}")}}} {{{fieldSymbol.ContainingType.Name}}}
                     {
-                        public const {{{fieldSymbol.ToDisplayString()}}} {{{name}}} = {{{(fieldType.Name.Equals("string", InvariantCultureIgnoreCase) ? "\"" : "")}}} {{{funcResult}}} {{{(fieldSymbol.Name.Equals("string", InvariantCultureIgnoreCase) ? "\"" : "")}}};
+                        public const {{{fieldSymbol.ToDisplayString()}}} {{{name}}} = {{{(fieldType.Name.Equals(nameof(String), InvariantCultureIgnoreCase) ? "\"" : "")}}}{{{funcResult}}}{{{(fieldSymbol.Name.Equals(nameof(String), InvariantCultureIgnoreCase) ? "\"" : "")}}};
                     }
                     """;
 
@@ -82,60 +85,5 @@ public class CompileTimeComputationGenerator : IIncrementalGenerator
                 fieldSymbol.Locations.FirstOrDefault()));
             }
         }
-    }
-
-    private static object CompileAndRunFunc(SourceProductionContext context, Compilation compilation, INamedTypeSymbol returnType, IFieldSymbol fieldSymbol)
-    {
-        try
-        {
-            var programClassName = $"Program_{guid.NewGuid().ToString().Substring(0, 4)}";
-            var code =
-            $$$"""
-            using System;
-            public class {{{programClassName}}}
-            {
-                public static {{{returnType.ToDisplayString()}}} Run()
-                {
-                    return {{{fieldSymbol.ContainingType.ToDisplayString()}}}.{{{fieldSymbol.Name}}}.Compute();
-                }
-            }
-            """;
-
-            var parseOptions = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.Preview);
-            var syntaxTree = CSharpSyntaxTree.ParseText(code, parseOptions);
-
-            compilation = compilation.AddSyntaxTrees(syntaxTree)
-                .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary))
-                .AddReferences(MetadataReference.CreateFromFile(typeof(object).Assembly.Location));
-
-            using var peStream = new MemoryStream();
-            using var pdbSream = new MemoryStream();
-            var assembly = compilation.Emit(peStream, pdbSream, options: new EmitOptions(false, DebugInformationFormat.Pdb, tolerateErrors: true, includePrivateMembers: true, pdbChecksumAlgorithm: HashAlgorithmName.SHA512), cancellationToken: default);
-            if (assembly.Success)
-            {
-                peStream.Flush();
-
-                var dynamicAssembly = Assembly.Load(peStream.GetBuffer());
-                var programType = dynamicAssembly.GetType(programClassName);
-                var methodInfo = programType.GetMethod("Run");
-
-                return methodInfo.Invoke(null, null);
-            }
-            else
-            {
-                foreach (var diagnostic in assembly.Diagnostics)
-                {
-                    context.ReportDiagnostic(diagnostic);
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            RegisterPostInitializationOutput(ctx => ctx.AddSource("error.g.cs", $@"/*
-{ex.GetType()}: {ex.Message}
-{ex.StackTrace}
-*/"));
-        }
-        return "NO RESULT";
     }
 }

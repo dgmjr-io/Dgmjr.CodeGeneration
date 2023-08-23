@@ -1,9 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     </PropertyGroup>
     <ItemGroup>
         <SourceGenerator Include="Dgmjr.CodeGeneration.CompileTimeComputation" />
+        <!-- <ProjectReference Include="../src/Dgmjr.CodeGeneration.CompileTimeComputation.csproj" OutputItemType="Anayzer" ReferenceOutputAssembly="false" /> -->
         <PackageReference Include="System.Security.Cryptography.Algorithms" />
         <PackageReference Include="Dgmjr.System.Extensions" />
     </ItemGroup>

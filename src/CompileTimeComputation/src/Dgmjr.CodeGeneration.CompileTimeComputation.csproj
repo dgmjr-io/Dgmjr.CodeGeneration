@@ -5,6 +5,7 @@
         <TargetFramework>netstandard2.0</TargetFramework>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
         <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+        <IsRoslynComponent>true</IsRoslynComponent>
         <Description>This package contains the CompileTimeComputationGenerator, which allows the creation of a compile-time computed constant field.</Description>
     </PropertyGroup>
     <ItemGroup>
@@ -16,7 +17,7 @@
         <PackageReference Include="System.CodeDom" /> -->
         <PackageReference Include="ThisAssembly.Project" />
         <PackageReference Include="ThisAssembly.AssemblyInfo" />
-        <PackageReference Include="Dgmjr.CodeGeneration.MethodSymbolExtensions" />
+        <PackageReference Include="Dgmjr.CodeGeneration.MemberSymbolExtensions" />
     </ItemGroup>
     <ItemGroup>
         <NoWarn Include="RS1035" />

@@ -17,5 +17,6 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
         <PackageReference Include="Microsoft.CodeAnalysis.Common" />
+        <PackageReference Include="Dgmjr.System.Extensions" />
     </ItemGroup>
 </Project>

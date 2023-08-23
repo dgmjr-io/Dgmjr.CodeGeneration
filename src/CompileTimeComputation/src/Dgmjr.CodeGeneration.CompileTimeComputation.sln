@@ -1,6 +1,5 @@
 ﻿Microsoft Visual Studio Solution File, Format Version 12.00
-# 
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B283EBC2-E01F-412D-9339-FD56EF114549}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B283EBC2-E01F-412D-9339-FD56EF114549}" 
 	ProjectSection(SolutionItems) = preProject
 		..\..\..\..\..\Packages\Versions.props = ..\..\..\..\..\Packages\Versions.props
 		..\..\..\..\..\Packages\Versions.Local.json = ..\..\..\..\..\Packages\Versions.Local.json
@@ -51,8 +50,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\..\..\..\..\Packages\Versions\PowerShell.props = ..\..\..\..\..\Packages\Versions\PowerShell.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dgmjr.CodeGeneration.CompileTimeComputation", "Dgmjr.CodeGeneration.CompileTimeComputation.csproj", "{69DBB3CD-94F4-4944-B4E3-0721DC4AED46}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Local|Any CPU = Local|Any CPU
@@ -63,18 +60,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{69DBB3CD-94F4-4944-B4E3-0721DC4AED46}.Local|Any CPU.ActiveCfg = Local|Any CPU
-		{69DBB3CD-94F4-4944-B4E3-0721DC4AED46}.Local|Any CPU.Build.0 = Local|Any CPU
-		{69DBB3CD-94F4-4944-B4E3-0721DC4AED46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{69DBB3CD-94F4-4944-B4E3-0721DC4AED46}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{69DBB3CD-94F4-4944-B4E3-0721DC4AED46}.Testing|Any CPU.ActiveCfg = Testing|Any CPU
-		{69DBB3CD-94F4-4944-B4E3-0721DC4AED46}.Testing|Any CPU.Build.0 = Testing|Any CPU
-		{69DBB3CD-94F4-4944-B4E3-0721DC4AED46}.Staging|Any CPU.ActiveCfg = Staging|Any CPU
-		{69DBB3CD-94F4-4944-B4E3-0721DC4AED46}.Staging|Any CPU.Build.0 = Staging|Any CPU
-		{69DBB3CD-94F4-4944-B4E3-0721DC4AED46}.Production|Any CPU.ActiveCfg = Local|Any CPU
-		{69DBB3CD-94F4-4944-B4E3-0721DC4AED46}.Production|Any CPU.Build.0 = Local|Any CPU
-		{69DBB3CD-94F4-4944-B4E3-0721DC4AED46}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{69DBB3CD-94F4-4944-B4E3-0721DC4AED46}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

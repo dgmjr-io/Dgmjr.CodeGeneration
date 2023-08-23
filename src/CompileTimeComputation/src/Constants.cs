@@ -54,13 +54,12 @@ using System.Runtime.CompilerServices;
     $$$"""
     {{{GeneratedCodeAttributes}}}
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Property)]
-    public sealed class {{{CompileTimeComputationOfT}}} : Attribute
+    internal sealed class {{{CompileTimeComputation}}} : Attribute
     {
         public {{{CompileTimeComputation}}}(string name)
         {
             Name = name;
         }
-
 
         public string Name { get; }
     }

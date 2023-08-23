@@ -51,35 +51,35 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\..\..\..\..\Packages\Versions\PowerShell.props = ..\..\..\..\..\Packages\Versions\PowerShell.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dgmjr.CodeGeneration.MethodSymbolExtensions", "Dgmjr.CodeGeneration.MethodSymbolExtensions.csproj", "{8B3CF94C-29A5-4D02-9FD5-8533FAACB80C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dgmjr.CodeGeneration.MemberSymbolExtensions", "Dgmjr.CodeGeneration.MemberSymbolExtensions.csproj", "{A8977A67-14DE-4935-842D-5A5994F8B529}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Local|Any CPU = Local|Any CPU
 		Debug|Any CPU = Debug|Any CPU
-		Testing|Any CPU = Testing|Any CPU
-		Staging|Any CPU = Staging|Any CPU
-		Production|Any CPU = Production|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8B3CF94C-29A5-4D02-9FD5-8533FAACB80C}.Local|Any CPU.ActiveCfg = Local|Any CPU
-		{8B3CF94C-29A5-4D02-9FD5-8533FAACB80C}.Local|Any CPU.Build.0 = Local|Any CPU
-		{8B3CF94C-29A5-4D02-9FD5-8533FAACB80C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8B3CF94C-29A5-4D02-9FD5-8533FAACB80C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8B3CF94C-29A5-4D02-9FD5-8533FAACB80C}.Testing|Any CPU.ActiveCfg = Testing|Any CPU
-		{8B3CF94C-29A5-4D02-9FD5-8533FAACB80C}.Testing|Any CPU.Build.0 = Testing|Any CPU
-		{8B3CF94C-29A5-4D02-9FD5-8533FAACB80C}.Staging|Any CPU.ActiveCfg = Staging|Any CPU
-		{8B3CF94C-29A5-4D02-9FD5-8533FAACB80C}.Staging|Any CPU.Build.0 = Staging|Any CPU
-		{8B3CF94C-29A5-4D02-9FD5-8533FAACB80C}.Production|Any CPU.ActiveCfg = Local|Any CPU
-		{8B3CF94C-29A5-4D02-9FD5-8533FAACB80C}.Production|Any CPU.Build.0 = Local|Any CPU
-		{8B3CF94C-29A5-4D02-9FD5-8533FAACB80C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8B3CF94C-29A5-4D02-9FD5-8533FAACB80C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8977A67-14DE-4935-842D-5A5994F8B529}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8977A67-14DE-4935-842D-5A5994F8B529}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8977A67-14DE-4935-842D-5A5994F8B529}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A8977A67-14DE-4935-842D-5A5994F8B529}.Debug|x64.Build.0 = Debug|Any CPU
+		{A8977A67-14DE-4935-842D-5A5994F8B529}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A8977A67-14DE-4935-842D-5A5994F8B529}.Debug|x86.Build.0 = Debug|Any CPU
+		{A8977A67-14DE-4935-842D-5A5994F8B529}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8977A67-14DE-4935-842D-5A5994F8B529}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8977A67-14DE-4935-842D-5A5994F8B529}.Release|x64.ActiveCfg = Release|Any CPU
+		{A8977A67-14DE-4935-842D-5A5994F8B529}.Release|x64.Build.0 = Release|Any CPU
+		{A8977A67-14DE-4935-842D-5A5994F8B529}.Release|x86.ActiveCfg = Release|Any CPU
+		{A8977A67-14DE-4935-842D-5A5994F8B529}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {B50134B4-5DB8-48D8-855C-02C21CC88F2A}
+		SolutionGuid = {3919BD08-B879-4926-BFE1-29609C4AA8EE}
 	EndGlobalSection
 EndGlobal
