@@ -54,16 +54,19 @@ using System.Runtime.CompilerServices;
 
     public const string CompileTimeComputationClassDeclaration =
     $$$"""
-    {{{GeneratedCodeAttributes}}}
+    {{{GeneratedCodeAttributes
+}
+}}
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Property)]
-    internal sealed class {{{CompileTimeComputation}}} : Attribute
-    {
-        public {{{CompileTimeComputation}}}(string name)
+internal sealed class {{ { CompileTimeComputation} }} : Attribute
+{
+        public
+{ { { CompileTimeComputation} } } (string name)
         {
-            Name = name;
-        }
+    Name = name;
+}
 
-        public string Name { get; }
+public string Name { get; }
     }
     """;
 }
