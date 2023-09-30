@@ -11,10 +11,9 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
-        <PackageReference Include="Microsoft.CodeAnalysis.Common" />
+        <PackageReference Include="Microsoft.CodeAnalysis.Common" VersionOverride="4.7.0" />
         <PackageReference Include="Scriban.Signed" />
-        <!-- <PackageReference Include="System.Text.Json" />
-        <PackageReference Include="System.CodeDom" /> -->
+        <!-- <PackageReference Include="Dgmjr.System.Extensions" /> -->
         <PackageReference Include="ThisAssembly.Project" />
         <PackageReference Include="ThisAssembly.AssemblyInfo" />
         <PackageReference Include="Dgmjr.CodeGeneration.MemberSymbolExtensions" />

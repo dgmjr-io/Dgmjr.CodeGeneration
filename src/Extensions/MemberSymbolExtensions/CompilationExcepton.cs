@@ -1,4 +1,4 @@
-namespace Dgmjr.CodeGeneration.MemberSymbolExtensions;
+namespace Microsoft.CodeAnalysis;
 using System.Runtime.Serialization;
 
 public class CompilationException : Exception

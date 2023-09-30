@@ -10,7 +10,7 @@
  *      License: MIT (https://opensource.org/licenses/MIT)
  */
 
-namespace Dgmjr.CodeGeneration.MemberSymbolExtensions;
+namespace Microsoft.CodeAnalysis;
 using System;
 using System.Linq;
 using System.Runtime.InteropServices;

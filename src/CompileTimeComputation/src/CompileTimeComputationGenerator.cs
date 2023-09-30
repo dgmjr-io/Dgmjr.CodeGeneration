@@ -1,22 +1,15 @@
-using System.Linq;
 namespace Dgmjr.CodeGeneration.CompileTimeComputation;
 using System;
 using System.Collections.Immutable;
 using System.Reflection;
-using System.Security.Cryptography;
-
-using Dgmjr.CodeGeneration.MemberSymbolExtensions;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Emit;
 
 using static Constants;
 
 using FieldDeclaration = (IPropertySymbol? Property, IMethodSymbol? Method, string Name, IFieldSymbol FieldSymbol, INamedTypeSymbol FieldType);
-using FieldDeclarationSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.FieldDeclarationSyntax;
-using VariableDeclaratorSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.VariableDeclaratorSyntax;
 
 [Generator]
 public class CompileTimeComputationGenerator : IIncrementalGenerator
@@ -28,16 +21,15 @@ public class CompileTimeComputationGenerator : IIncrementalGenerator
             HeaderTemplate.Render(new { Filename = $"{CompileTimeComputation}.g.cs" }) +
             CompileTimeComputationClassDeclaration));
         // Register the generator for syntax notifications
-        var syntaxProvider = context.SyntaxProvider.ForAttributeWithMetadataName(CompileTimeComputation, Select, Project);
-        var syntaxProviderWithCompilationProvider = syntaxProvider.Collect().Combine(context.CompilationProvider);
+        var syntaxProvider = context.SyntaxProvider.ForAttributeWithMetadataName(CompileTimeComputation, Select, Project).Collect();
+        var syntaxProviderWithCompilationProvider = syntaxProvider.Combine(context.CompilationProvider);
         context.RegisterSourceOutput(syntaxProviderWithCompilationProvider, Execute);
     }
 
     private static Action<Action<IncrementalGeneratorPostInitializationContext>> RegisterPostInitializationOutput { get; set; }
 
     private static bool Select(SyntaxNode node, CancellationToken cancellationToken)
-        => node is PropertyDeclarationSyntax pds ? pds.DescendantNodesAndTokensAndSelf(node => node.IsKind(SyntaxKind.PublicKeyword)).Any() && pds.DescendantNodesAndTokensAndSelf(node => node.IsKind(SyntaxKind.StaticKeyword)).Any() && pds.DescendantNodesAndTokensAndSelf(node => node.IsKind(SyntaxKind.ReadOnlyKeyword)).Any() :
-            node is MethodDeclarationSyntax mds && mds.DescendantNodesAndTokensAndSelf(node => node.IsKind(SyntaxKind.PublicKeyword)).Any() && mds.DescendantNodesAndTokensAndSelf(node => node.IsKind(SyntaxKind.StaticKeyword)).Any();
+        => true; /*node is PropertyDeclarationSyntax pds ? pds.DescendantNodesAndTokensAndSelf(node => node.IsKind(SyntaxKind.PublicKeyword)).Any() && pds.DescendantNodesAndTokensAndSelf(node => node.IsKind(SyntaxKind.StaticKeyword)).Any() : node is MethodDeclarationSyntax mds && mds.DescendantNodesAndTokensAndSelf(node => node.IsKind(SyntaxKind.PublicKeyword)).Any() && mds.DescendantNodesAndTokensAndSelf(node => node.IsKind(SyntaxKind.StaticKeyword)).Any();*/
 
     private static FieldDeclaration Project(GeneratorAttributeSyntaxContext context, CancellationToken cancellationToken)
         => (Property: context.TargetNode is PropertyDeclarationSyntax ? context.TargetSymbol as IPropertySymbol : null,
@@ -49,8 +41,9 @@ public class CompileTimeComputationGenerator : IIncrementalGenerator
     public static void Execute(SourceProductionContext context, (ImmutableArray<FieldDeclaration> FieldDeclarations, Compilation Compilation) contexts)
     {
         var (fieldDeclarations, compilation) = contexts;
+        context.AddSource("ConstantFieldDeclarations.cs", $"/* \n{compilation.GetDiagnostics().Select(diag => $"{diag.Severity} {diag.Descriptor.Id}: {diag.Descriptor.Title}: {diag.Descriptor.Description} [{diag.Location.SourceTree.FilePath}({diag.Location.GetLineSpan().StartLinePosition.Line},{diag.Location.GetLineSpan().StartLinePosition.Character})]").Join("\n")} \n\n {fieldDeclarations.Length} \n*/");
         context.ReportDiagnostic(Diagnostic.Create(new DiagnosticDescriptor("DEBUG01", "", $"DEBUG(compilation.GetDiagnostics().Length): *{compilation.GetDiagnostics().Length}*", "DEBUG", DiagnosticSeverity.Warning, true), null));
-        context.ReportDiagnostic(Diagnostic.Create(new DiagnosticDescriptor("DEBUG02", "", $"DEBUG(fieldDeclarations.Count()): *{fieldDeclarations.Length}*", "DEBUG", DiagnosticSeverity.Warning, true), null));
+        context.ReportDiagnostic(Diagnostic.Create(new DiagnosticDescriptor("DEBUG02", "", $"DEBUG(fieldDeclarations.Length): *{fieldDeclarations.Length}*", "DEBUG", DiagnosticSeverity.Warning, true), null));
         foreach (var (property, method, name, fieldSymbol, fieldType) in fieldDeclarations)
         {
             // Get the field type and name
@@ -60,12 +53,14 @@ public class CompileTimeComputationGenerator : IIncrementalGenerator
             if (ValidConstTypeNames.Contains(fieldType?.Name, StringComparer.InvariantCultureIgnoreCase))
             {
                 // create the const variable expresion
-                var funcResult = method.InvokeStaticMethod(compilation);
-                var filename = $"CompileTimeComputation.{method.ContainingType}.{name}.g.cs";
+                try
+                {
+                    var funcResult = method.InvokeStaticMethod(compilation);
+                    var filename = $"CompileTimeComputation.{method.ContainingType}.{name}.g.cs";
 
-                var constDeclaration =
-                HeaderTemplate.Render(new { Filename = filename }) +
-                $$$"""
+                    var constDeclaration =
+                    HeaderTemplate.Render(new { Filename = filename }) +
+                    $$$"""
                     namespace {{{fieldSymbol.ContainingType.ContainingNamespace.ToDisplayString()}}};
 
                     {{{fieldSymbol.ContainingType.DeclaredAccessibility.ToString().ToLower().Replace("or", " ").Replace("and", " ")}}} {{{(fieldSymbol.ContainingType.IsStatic ? "static" : "")}}} partial {{{(fieldSymbol.ContainingType.IsRecord ? "record" : "")}}} {{{(fieldSymbol.ContainingType.TypeKind == TypeKind.Class ? "class" : fieldSymbol.ContainingType.TypeKind == TypeKind.Struct ? "struct" : $"#error Wrong data structure type: {fieldSymbol.ContainingType.TypeKind}")}}} {{{fieldSymbol.ContainingType.Name}}}
@@ -74,8 +69,13 @@ public class CompileTimeComputationGenerator : IIncrementalGenerator
                     }
                     """;
 
-                // Add the class and const variable declarations to the compilation
-                context.AddSource(filename, constDeclaration);
+                    // Add the class and const variable declarations to the compilation
+                    context.AddSource(filename, constDeclaration);
+                }
+                catch (TargetInvocationException tiex)
+                {
+                    throw tiex.InnerException ?? tiex;
+                }
             }
             else
             {

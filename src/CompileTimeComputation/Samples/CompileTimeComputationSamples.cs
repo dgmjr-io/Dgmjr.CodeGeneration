@@ -4,7 +4,9 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 
-// using CompileTimeComputation<T> = Dgmjr.CodeGeneration.CompileTimeComputation.Samples.Bar.CompileTimeComputation<T>;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+// using Microsoft.CodeAnalysis.MSBuild;
 
 public static partial class Foo
 {
@@ -15,25 +17,27 @@ public static partial class Foo
     public static string MakeGuidString() => MD5.ComputeHash(UriString.ToUTF8Bytes()).ToHexString();
 }
 
-public static partial class Foo
-{
-    static Foo()
-    {
-        var workspace = new AdhocWorkspace();
-        var project = workspace.AddProject("Foo", "C#");
-
-    }
-}
-
-// public sealed class CompileTimeComputationAttribute<T> : Attribute
+// public static partial class Foo
 // {
-//     public CompileTimeComputationAttribute(string name)
+//     static Foo()
 //     {
-//         Name = name;
+//         var workspace = MSBuildWorkspace.Create();
+//         var project = workspace.OpenProjectAsync("/Users/david/GitHub/dgmjr-io/src/CodeGeneration/src/CompileTimeComputation/Samples/Dgmjr.CodeGeneration.CompileTimeComputation.Samples.csproj").GetAwaiter().GetResult();
+//         var compilation = project.GetCompilationAsync().Result;
+//         var methodSymbol = compilation.SyntaxTrees.SelectMany(st => st.GetCompilationUnitRoot().DescendantNodesAndSelf(n => n is MethodDeclarationSyntax, true)).Select(m => compilation.GetSemanticModel(m.SyntaxTree).GetDeclaredSymbol(m)).FirstOrDefault(ms => ms is IMethodSymbol methSym && methSym.Name == "MakeGuidString") as IMethodSymbol;
+//         Console.WriteLine(methodSymbol.InvokeStaticMethod(compilation));
 //     }
-
-//     public string Name { get; }
 // }
+
+public sealed class CompileTimeComputationAttribute : Attribute
+{
+    public CompileTimeComputationAttribute(string name)
+    {
+        Name = name;
+    }
+
+    public string Name { get; }
+}
 
 // namespace Bar
 // {

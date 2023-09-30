@@ -841,8 +841,8 @@ Backup of *.doc*
 *mies
 
 # Other names that would make sense
-*tests
-*testsdir
+# *tests
+# *testsdir
 *testsfile
 *testsfiles
 *test
