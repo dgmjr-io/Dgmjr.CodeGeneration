@@ -1,4 +1,5 @@
 using System.Diagnostics;
+
 /*
  * DiagnosticsExtensions.cs
  *
@@ -15,5 +16,6 @@ namespace Microsoft.CodeAnalysis;
 
 public static class DiagnosticsExtensions
 {
-    public static IEnumerable<Diagnostic> Errors(this IEnumerable<Diagnostic> diagnostics) => diagnostics.Where(diag => diag.Severity == DiagnosticSeverity.Error);
+    public static IEnumerable<Diagnostic> Errors(this IEnumerable<Diagnostic> diagnostics) =>
+        diagnostics.Where(diag => diag.Severity == DiagnosticSeverity.Error);
 }

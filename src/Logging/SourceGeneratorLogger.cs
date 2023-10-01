@@ -6,9 +6,11 @@ using System.Globalization;
 using System.Text;
 using Microsoft.Extensions.Logging;
 
-public class SourceGeneratorLogger<T> : SourceGeneratorLogger, ILogger<T> where T : notnull
+public class SourceGeneratorLogger<T> : SourceGeneratorLogger, ILogger<T>
+    where T : notnull
 {
-    public SourceGeneratorLogger(IncrementalGeneratorInitializationContext context) : base(context, typeof(T).FullName) { }
+    public SourceGeneratorLogger(IncrementalGeneratorInitializationContext context)
+        : base(context, typeof(T).FullName) { }
 }
 
 public class SourceGeneratorLogger : ILogger, IDisposable
@@ -22,14 +24,18 @@ public class SourceGeneratorLogger : ILogger, IDisposable
     private readonly IncrementalGeneratorInitializationContext _context;
     private readonly IList<string> _logs = new List<string>();
 
-    public SourceGeneratorLogger(IncrementalGeneratorInitializationContext context, string? category = null)
+    public SourceGeneratorLogger(
+        IncrementalGeneratorInitializationContext context,
+        string? category = null
+    )
     {
         _context = context;
         _category = category;
         this.LogBeginLog(_category, DateTimeOffset.UtcNow);
     }
 
-    public IDisposable? BeginScope<TState>(TState state) where TState : notnull
+    public IDisposable? BeginScope<TState>(TState state)
+        where TState : notnull
     {
         _indentation++;
         ReIndent();
@@ -54,7 +60,13 @@ public class SourceGeneratorLogger : ILogger, IDisposable
 
     public bool IsEnabled(LogLevel logLevel) => true;
 
-    public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
+    public void Log<TState>(
+        LogLevel logLevel,
+        EventId eventId,
+        TState state,
+        Exception? exception,
+        Func<TState, Exception?, string> formatter
+    )
     {
         _logs.Add($"/* {Indentation}{formatter(state, exception)} */");
     }
@@ -65,7 +77,9 @@ public class SourceGeneratorLogger : ILogger, IDisposable
         {
             if (disposing)
             {
-                _context.RegisterPostInitializationOutput(ctx => ctx.AddSource("log.g.cs", GetLogs()));
+                _context.RegisterPostInitializationOutput(
+                    ctx => ctx.AddSource("log.g.cs", GetLogs())
+                );
             }
             disposedValue = true;
         }

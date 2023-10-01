@@ -1,4 +1,5 @@
 namespace Microsoft.CodeAnalysis;
+
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -16,7 +17,8 @@ public static class TypeGenerationExtensions
         return (t.WithMembers(SyntaxFactory.List(members)) as T)!;
     }
 
-    public static T WithBaseType<T>(this T t, BaseTypeSyntax @base) where T : TypeDeclarationSyntax
+    public static T WithBaseType<T>(this T t, BaseTypeSyntax @base)
+        where T : TypeDeclarationSyntax
     {
         return (t.AddBaseListTypes(new[] { @base }) as T)!;
     }
@@ -36,17 +38,20 @@ public static class TypeGenerationExtensions
         )!;
     }
 
-    public static T WithModifier<T>(this T t, SyntaxToken modifier) where T : TypeDeclarationSyntax
+    public static T WithModifier<T>(this T t, SyntaxToken modifier)
+        where T : TypeDeclarationSyntax
     {
         return (t.AddModifiers(new[] { modifier }) as T)!;
     }
 
-    public static T WithModifier<T>(this T t, SyntaxKind modifier) where T : TypeDeclarationSyntax
+    public static T WithModifier<T>(this T t, SyntaxKind modifier)
+        where T : TypeDeclarationSyntax
     {
         return (t.WithModifier(SyntaxFactory.Token(modifier)) as T)!;
     }
 
-    public static T WithKeyword<T>(this T t, SyntaxKind keyword) where T : TypeDeclarationSyntax
+    public static T WithKeyword<T>(this T t, SyntaxKind keyword)
+        where T : TypeDeclarationSyntax
     {
         return (t.WithKeyword(SyntaxFactory.Token(keyword)) as T)!;
     }

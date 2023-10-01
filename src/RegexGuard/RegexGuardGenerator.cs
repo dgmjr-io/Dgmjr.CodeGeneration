@@ -1,11 +1,11 @@
-/* 
+/*
  * RegexGuardGenerator.cs
- * 
+ *
  *   Created: 2023-06-28-09:38:52
  *   Modified: 2023-06-28-09:38:52
- * 
+ *
  *   Author: David G. Moore, Jr. <david@dgmjr.io>
- *   
+ *
  *   Copyright © 2022 - 2023 David G. Moore, Jr., All Rights Reserved
  *      License: MIT (https://opensource.org/licenses/MIT)
  */
@@ -19,7 +19,8 @@ using System.Linq;
 [Generator]
 public class RegexGuardGenerator : ISourceGenerator
 {
-    private const string AttributeText = @"
+    private const string AttributeText =
+        @"
         using System;
         
         [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
@@ -60,32 +61,65 @@ public class RegexGuardGenerator : ISourceGenerator
             return;
 
         var syntaxReceiver = new SyntaxReceiver();
-        compilation.SyntaxTrees.Select(s => s.GetRoot()).SelectMany(r => r.DescendantNodes()).OfType<VariableDeclarationSyntax>().ToList().ForEach(v =>
-          v.Variables.ToList().ForEach(variable =>
-          {
-              var symbolInfo = compilation.GetSemanticModel(v.SyntaxTree).GetSymbolInfo(variable);
-              var symbol = symbolInfo.Symbol ?? symbolInfo.CandidateSymbols.FirstOrDefault();
+        compilation.SyntaxTrees
+            .Select(s => s.GetRoot())
+            .SelectMany(r => r.DescendantNodes())
+            .OfType<VariableDeclarationSyntax>()
+            .ToList()
+            .ForEach(
+                v =>
+                    v.Variables
+                        .ToList()
+                        .ForEach(variable =>
+                        {
+                            var symbolInfo = compilation
+                                .GetSemanticModel(v.SyntaxTree)
+                                .GetSymbolInfo(variable);
+                            var symbol =
+                                symbolInfo.Symbol ?? symbolInfo.CandidateSymbols.FirstOrDefault();
 
-              if (symbol != null && symbol.GetAttributes().Any(ad => ad.AttributeClass.Equals(attributeSymbol)))
-                  syntaxReceiver.Variables.Add(variable);
-          }));
+                            if (
+                                symbol != null
+                                && symbol
+                                    .GetAttributes()
+                                    .Any(ad => ad.AttributeClass.Equals(attributeSymbol))
+                            )
+                                syntaxReceiver.Variables.Add(variable);
+                        })
+            );
 
         foreach (var variable in syntaxReceiver.Variables.Distinct())
         {
             var model = compilation.GetSemanticModel(variable.SyntaxTree);
 
-            foreach (var declarator in variable.DescendantNodes().OfType<VariableDeclaratorSyntax>())
+            foreach (
+                var declarator in variable.DescendantNodes().OfType<VariableDeclaratorSyntax>()
+            )
             {
-                var symbolInfo = model.GetDeclaredSymbol(declarator) as IFieldSymbol ?? model.GetDeclaredSymbol(declarator) as IPropertySymbol ?? model.GetDeclaredSymbol(declarator) as IParameterSymbol;
+                var symbolInfo =
+                    model.GetDeclaredSymbol(declarator) as IFieldSymbol
+                    ?? model.GetDeclaredSymbol(declarator) as IPropertySymbol
+                    ?? model.GetDeclaredSymbol(declarator) as IParameterSymbol;
 
-                if (symbolInfo != null && symbolInfo.GetAttributes().Any(ad => ad.AttributeClass.Equals(attributeSymbol)))
+                if (
+                    symbolInfo != null
+                    && symbolInfo
+                        .GetAttributes()
+                        .Any(ad => ad.AttributeClass.Equals(attributeSymbol))
+                )
                 {
-                    var attributeData = symbolInfo.GetAttributes().First(ad => ad.AttributeClass.Equals(attributeSymbol));
+                    var attributeData = symbolInfo
+                        .GetAttributes()
+                        .First(ad => ad.AttributeClass.Equals(attributeSymbol));
                     var regexPatternArg = attributeData.ConstructorArguments.First();
 
                     var sourceBuilder = new IndentedStringBuilder();
-                    sourceBuilder.AppendLine($"{variable.Identifier.ValueText} {declarator.Identifier.ValueText};");
-                    sourceBuilder.AppendLine($"public {variable.Type} {declarator.Identifier.ValueText}");
+                    sourceBuilder.AppendLine(
+                        $"{variable.Identifier.ValueText} {declarator.Identifier.ValueText};"
+                    );
+                    sourceBuilder.AppendLine(
+                        $"public {variable.Type} {declarator.Identifier.ValueText}"
+                    );
                     sourceBuilder.AppendLine("{");
                     sourceBuilder.IncrementIndent();
                     sourceBuilder.AppendLine("get");
@@ -98,9 +132,13 @@ public class RegexGuardGenerator : ISourceGenerator
                     sourceBuilder.AppendLine("{");
                     sourceBuilder.IncrementIndent();
 
-                    sourceBuilder.AppendLine($"({attributeData.AttributeClass.Name})attributeData.Constructor.Invoke(new object[] {{ \"{regexPatternArg.Value}\" }});");
+                    sourceBuilder.AppendLine(
+                        $"({attributeData.AttributeClass.Name})attributeData.Constructor.Invoke(new object[] {{ \"{regexPatternArg.Value}\" }});"
+                    );
 
-                    sourceBuilder.AppendLine($"{attributeData.AttributeClass.Name}.Validate(value);");
+                    sourceBuilder.AppendLine(
+                        $"{attributeData.AttributeClass.Name}.Validate(value);"
+                    );
 
                     sourceBuilder.AppendLine($"{declarator.Identifier.ValueText} = value;");
 
@@ -109,7 +147,10 @@ public class RegexGuardGenerator : ISourceGenerator
                     sourceBuilder.DecrementIndent();
                     sourceBuilder.Append("}");
 
-                    context.AddSource($"{symbolInfo.Name}_guard.cs", SourceText.From(sourceBuilder.ToString(), Encoding.UTF8));
+                    context.AddSource(
+                        $"{symbolInfo.Name}_guard.cs",
+                        SourceText.From(sourceBuilder.ToString(), Encoding.UTF8)
+                    );
                 }
             }
         }
@@ -122,14 +163,22 @@ public class RegexGuardGenerator : ISourceGenerator
 
         public void OnVisitSyntaxNode(SyntaxNode syntaxNode)
         {
-            if (syntaxNode is VariableDeclarationSyntax variableDeclarationSyntax &&
-                variableDeclarationSyntax.Parent is FieldDeclarationSyntax fieldDeclarationSyntax &&
-                fieldDeclarationSyntax.Modifiers.Any(SyntaxKind.ReadOnlyKeyword))
+            if (
+                syntaxNode is VariableDeclarationSyntax variableDeclarationSyntax
+                && variableDeclarationSyntax.Parent is FieldDeclarationSyntax fieldDeclarationSyntax
+                && fieldDeclarationSyntax.Modifiers.Any(SyntaxKind.ReadOnlyKeyword)
+            )
             {
                 return; // Ignore read-only fields.
             }
 
-            if (!(syntaxNode is VariableDeclaratorSyntax || syntaxNode is ParameterSyntax || syntaxNode is PropertyDeclarationSyntax))
+            if (
+                !(
+                    syntaxNode is VariableDeclaratorSyntax
+                    || syntaxNode is ParameterSyntax
+                    || syntaxNode is PropertyDeclarationSyntax
+                )
+            )
                 return;
 
             this.Variables.Add(variableDeclarationSyntax);

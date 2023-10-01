@@ -20,9 +20,11 @@ public record struct CodeTemplate
     {
         try
         {
-            var codeTemplate = new CodeTemplate(new StreamReader(typeof(CodeTemplate).Assembly
-                .GetManifestResourceStream(manifestResourceName))
-                .ReadToEnd());
+            var codeTemplate = new CodeTemplate(
+                new StreamReader(
+                    typeof(CodeTemplate).Assembly.GetManifestResourceStream(manifestResourceName)
+                ).ReadToEnd()
+            );
             return codeTemplate;
         }
         catch (Exception e)
@@ -40,9 +42,11 @@ public record struct CodeTemplate<T>
 
     public static CodeTemplate FromResource(string manifestResourceName)
     {
-        var codeTemplate = new CodeTemplate(new StreamReader(typeof(T).Assembly
-               .GetManifestResourceStream(manifestResourceName))
-               .ReadToEnd());
+        var codeTemplate = new CodeTemplate(
+            new StreamReader(
+                typeof(T).Assembly.GetManifestResourceStream(manifestResourceName)
+            ).ReadToEnd()
+        );
         return codeTemplate;
     }
 }

@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Dgmjr.CodeGeneration.Logging;
 
-
 public class SourceGeneratorLoggingProvider : ILoggerProvider
 {
     private bool disposedValue;
@@ -20,7 +19,8 @@ public class SourceGeneratorLoggingProvider : ILoggerProvider
         return new SourceGeneratorLogger(_context, categoryName);
     }
 
-    public ILogger<T> CreateLogger<T>() where T : notnull => new SourceGeneratorLogger<T>(_context);
+    public ILogger<T> CreateLogger<T>()
+        where T : notnull => new SourceGeneratorLogger<T>(_context);
 
     protected virtual void Dispose(bool disposing)
     {

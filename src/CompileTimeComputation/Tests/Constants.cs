@@ -2,8 +2,7 @@ namespace Dgmjr.CodeGeneration.CompileTimeComputation.Tests;
 
 public static class Constants
 {
-    public const string Source =
-    """
+    public const string Source = """
     namespace Foo;
 
     public partial class Bar

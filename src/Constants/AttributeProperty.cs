@@ -12,4 +12,9 @@
 
 namespace Dgmjr.CodeGeneration;
 
-public record struct AttributeProperty(System.Type property_type, string property_name, string default_value = "null", bool is_required = false);
+public record struct AttributeProperty(
+    System.Type property_type,
+    string property_name,
+    string default_value = "null",
+    bool is_required = false
+);

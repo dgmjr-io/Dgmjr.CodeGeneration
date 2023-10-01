@@ -16,15 +16,16 @@ namespace Microsoft.CodeAnalysis;
 
 internal static class PropertySymbolExtensions
 {
-
     public static bool IsPrivateSettable(this IPropertySymbol property)
     {
-        return property.SetMethod is { IsInitOnly: false, DeclaredAccessibility: Accessibility.Private };
+        return property.SetMethod
+            is { IsInitOnly: false, DeclaredAccessibility: Accessibility.Private };
     }
 
     public static bool IsPublicSettable(this IPropertySymbol property)
     {
-        return property.SetMethod is { IsInitOnly: false, DeclaredAccessibility: Accessibility.Public };
+        return property.SetMethod
+            is { IsInitOnly: false, DeclaredAccessibility: Accessibility.Public };
     }
 
     // internal static bool TryGetIDictionaryElementTypes(this IPropertySymbol property, out (INamedTypeSymbol key, INamedTypeSymbol value)? tuple)

@@ -11,6 +11,7 @@
  */
 
 namespace Microsoft.CodeAnalysis;
+
 using System;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -24,15 +25,20 @@ using Microsoft.CodeAnalysis.Emit;
 
 public static class MemberSymbolInvocationExtensions
 {
-    public static object InvokeStaticMethod(this IMethodSymbol methodSymbol, Compilation compilation, params object[] arguments)
+    public static object InvokeStaticMethod(
+        this IMethodSymbol methodSymbol,
+        Compilation compilation,
+        params object[] arguments
+    )
     {
         if (!methodSymbol.IsStatic || methodSymbol.DeclaredAccessibility != Accessibility.Public)
         {
-            throw new InvalidOperationException($"The method {methodSymbol.ToDisplayString()} must be public and static.");
+            throw new InvalidOperationException(
+                $"The method {methodSymbol.ToDisplayString()} must be public and static."
+            );
         }
         var programClassName = $"Program_{guid.NewGuid().ToByteArray().ToHexString()}";
-        var program =
-        $$"""
+        var program = $$"""
         using System;
 
         public static class {{programClassName}}
@@ -43,15 +49,21 @@ public static class MemberSymbolInvocationExtensions
         return AddToCompilatonAndCallRun(compilation, program, programClassName);
     }
 
-    public static object GetStaticPropertyValue(this IPropertySymbol propertySymbol, Compilation compilation)
+    public static object GetStaticPropertyValue(
+        this IPropertySymbol propertySymbol,
+        Compilation compilation
+    )
     {
-        if (!propertySymbol.IsStatic || propertySymbol.DeclaredAccessibility != Accessibility.Public)
+        if (
+            !propertySymbol.IsStatic || propertySymbol.DeclaredAccessibility != Accessibility.Public
+        )
         {
-            throw new InvalidOperationException($"The property {propertySymbol.ToDisplayString()} must be public and static.");
+            throw new InvalidOperationException(
+                $"The property {propertySymbol.ToDisplayString()} must be public and static."
+            );
         }
         var programClassName = $"Program_{guid.NewGuid().ToByteArray().ToHexString()}";
-        var program =
-        $$"""
+        var program = $$"""
         using System;
 
         public static class {{programClassName}}
@@ -62,20 +74,37 @@ public static class MemberSymbolInvocationExtensions
         return AddToCompilatonAndCallRun(compilation, program, programClassName);
     }
 
-    private static object AddToCompilatonAndCallRun(Compilation compilation, string cSharpCode, string programClassName)
+    private static object AddToCompilatonAndCallRun(
+        Compilation compilation,
+        string cSharpCode,
+        string programClassName
+    )
     {
-        compilation = compilation.AddSyntaxTrees(SyntaxFactory.ParseSyntaxTree(cSharpCode, compilation.SyntaxTrees.First().Options));
+        compilation = compilation.AddSyntaxTrees(
+            SyntaxFactory.ParseSyntaxTree(cSharpCode, compilation.SyntaxTrees.First().Options)
+        );
         return EmitAndCallRun(compilation, programClassName, cSharpCode);
     }
 
-    private static object EmitAndCallRun(Compilation compilation, string programClassName, string? extraInfo = "")
+    private static object EmitAndCallRun(
+        Compilation compilation,
+        string programClassName,
+        string? extraInfo = ""
+    )
     {
         using var asmStream = new MemoryStream();
-        var emitResult = compilation.Emit(asmStream, options: new EmitOptions(false, debugInformationFormat: DebugInformationFormat.Embedded));
+        var emitResult = compilation.Emit(
+            asmStream,
+            options: new EmitOptions(false, debugInformationFormat: DebugInformationFormat.Embedded)
+        );
         if (!emitResult.Success)
         {
-            var errorDiagnostic = emitResult.Diagnostics.FirstOrDefault(diag => diag.Severity == DiagnosticSeverity.Error);
-            throw new CompilationException($"{programClassName}: {errorDiagnostic?.GetMessage()}{(!IsNullOrEmpty(extraInfo) ? ", *" : "")}{extraInfo?.Replace("\n", " ").Replace("\r", " ")}{(!IsNullOrEmpty(extraInfo) ? "*" : "")}");
+            var errorDiagnostic = emitResult.Diagnostics.FirstOrDefault(
+                diag => diag.Severity == DiagnosticSeverity.Error
+            );
+            throw new CompilationException(
+                $"{programClassName}: {errorDiagnostic?.GetMessage()}{(!IsNullOrEmpty(extraInfo) ? ", *" : "")}{extraInfo?.Replace("\n", " ").Replace("\r", " ")}{(!IsNullOrEmpty(extraInfo) ? "*" : "")}"
+            );
         }
         asmStream.Flush();
         var asm = Assembly.Load(asmStream.GetBuffer());

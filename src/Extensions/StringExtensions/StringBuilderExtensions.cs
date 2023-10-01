@@ -39,7 +39,8 @@ public class IndentedStringBuilder : IStringBuilder
         set => _sb[index] = value;
     }
 
-    public IndentedStringBuilder() : this(new StringBuilder()) { }
+    public IndentedStringBuilder()
+        : this(new StringBuilder()) { }
 
     public IndentedStringBuilder(StringBuilder sb)
     {

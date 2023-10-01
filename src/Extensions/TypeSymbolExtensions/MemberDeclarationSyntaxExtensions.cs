@@ -10,6 +10,7 @@
 //      License: MIT (https://opensource.org/licenses/MIT)
 //
 namespace Microsoft.CodeAnalysis;
+
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 internal static class MemberDeclarationSyntaxExtensions

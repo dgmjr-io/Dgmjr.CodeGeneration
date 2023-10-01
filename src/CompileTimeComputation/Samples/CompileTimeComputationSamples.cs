@@ -6,12 +6,14 @@ using System.Text;
 
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+
 // using Microsoft.CodeAnalysis.MSBuild;
 
 public static partial class Foo
 {
     public static readonly MD5 MD5 = global::System.Security.Cryptography.MD5.Create();
-    public const string UriString = "https://dgmjr.io/codegeneration/compiletimecomputation/samples";
+    public const string UriString =
+        "https://dgmjr.io/codegeneration/compiletimecomputation/samples";
 
     [method: CompileTimeComputation("GuidString")]
     public static string MakeGuidString() => MD5.ComputeHash(UriString.ToUTF8Bytes()).ToHexString();

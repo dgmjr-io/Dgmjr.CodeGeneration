@@ -10,6 +10,7 @@
 //      License: MIT (https://opensource.org/licenses/MIT)
 //
 namespace Microsoft.CodeAnalysis;
+
 using System.Text;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -20,7 +21,11 @@ internal static class AttributeExtensions
         return symbol?.GetAttributes().FirstOrDefault(a => a.AttributeClass.Name == attributeName);
     }
 
-    public static object? GetAttributeConstructorArgument(this AttributeData attribute, string argumentName, object? @default = default)
+    public static object? GetAttributeConstructorArgument(
+        this AttributeData attribute,
+        string argumentName,
+        object? @default = default
+    )
     {
         var argument = attribute?.NamedArguments.FirstOrDefault(a => a.Key == argumentName);
         return argument?.Value.Value ?? @default;
@@ -36,7 +41,11 @@ internal static class AttributeExtensions
     /// <param name="default">@default is an optional parameter with a default value of null. It is
     /// used to specify a default value to return if the constructor argument with the given name is not
     /// found in the attribute.</param>
-    public static string? GetConstructorArgumentAsString(this AttributeData attribute, string argumentName, string? @default = default)
+    public static string? GetConstructorArgumentAsString(
+        this AttributeData attribute,
+        string argumentName,
+        string? @default = default
+    )
     {
         var argument = attribute?.NamedArguments.FirstOrDefault(a => a.Key == argumentName);
         return argument?.Value.Value?.ToString();
@@ -54,7 +63,11 @@ internal static class AttributeExtensions
     /// returned if the constructor argument at the specified index is not found or cannot be converted
     /// to the expected type. If no default value is provided, the method will return null if the
     /// argument is not found or cannot be converted.</param>
-    public static object? GetConstructorArgumentAtIndex(this AttributeData attribute, int argumentIndex, object? @default = default)
+    public static object? GetConstructorArgumentAtIndex(
+        this AttributeData attribute,
+        int argumentIndex,
+        object? @default = default
+    )
     {
         var argument = attribute?.ConstructorArguments.ElementAtOrDefault(argumentIndex);
         return argument?.Value;
@@ -69,19 +82,31 @@ internal static class AttributeExtensions
     /// attribute's type, constructor arguments, and named arguments.</param>
     /// <param name="argumentIndex">The index of the constructor argument to retrieve as a string. This
     /// is used to get a specific argument value from the constructor of an attribute.</param>
-    public static string? GetConstructorArgumentAsString(this AttributeData attribute, int argumentIndex)
+    public static string? GetConstructorArgumentAsString(
+        this AttributeData attribute,
+        int argumentIndex
+    )
     {
         var argument = attribute?.ConstructorArguments.ElementAtOrDefault(argumentIndex);
         return argument?.Value?.ToString();
     }
 
-    public static string? GetAttributeConstructorArgumentAsString(this ISymbol symbol, string attributeName, string argumentName)
+    public static string? GetAttributeConstructorArgumentAsString(
+        this ISymbol symbol,
+        string attributeName,
+        string argumentName
+    )
     {
         var attribute = symbol?.GetAttribute(attributeName);
         return attribute?.GetConstructorArgumentAsString(argumentName);
     }
 
-    public static string? GetAttributeConstructorArgumentAsString(this ISymbol symbol, string attributeName, string argumentName, string defaultValue)
+    public static string? GetAttributeConstructorArgumentAsString(
+        this ISymbol symbol,
+        string attributeName,
+        string argumentName,
+        string defaultValue
+    )
     {
         var attribute = symbol?.GetAttribute(attributeName);
         return attribute?.GetConstructorArgumentAsString(argumentName) ?? defaultValue;
@@ -109,7 +134,10 @@ internal static class AttributeExtensions
         return str.ToString();
     }
 
-    public static ExpressionSyntax GetAttributeDeclarationSyntax(this AttributeData attributeData, string attributeName)
+    public static ExpressionSyntax GetAttributeDeclarationSyntax(
+        this AttributeData attributeData,
+        string attributeName
+    )
     {
         // Check if the attribute name matches the specified name
         if (attributeData.AttributeClass?.Name != attributeName)
@@ -120,13 +148,17 @@ internal static class AttributeExtensions
         // Create a syntax node for the attribute
         var attributeSyntax = SyntaxFactory.Attribute(
             SyntaxFactory.IdentifierName(attributeName),
-            SyntaxFactory.AttributeArgumentList());
+            SyntaxFactory.AttributeArgumentList()
+        );
 
         // Add any arguments to the attribute syntax
         foreach (var argument in attributeData.NamedArguments)
         {
             var identifier = SyntaxFactory.IdentifierName(argument.Key);
-            var value = SyntaxFactory.LiteralExpression(SyntaxKind.StringLiteralExpression, SyntaxFactory.Literal(argument.Value.Value.ToString()));
+            var value = SyntaxFactory.LiteralExpression(
+                SyntaxKind.StringLiteralExpression,
+                SyntaxFactory.Literal(argument.Value.Value.ToString())
+            );
             var argumentSyntax = SyntaxFactory.AttributeArgument(identifier, null, value);
             attributeSyntax = attributeSyntax.AddArgumentListArguments(argumentSyntax);
         }
@@ -135,13 +167,27 @@ internal static class AttributeExtensions
         return SyntaxFactory.ParseExpression(attributeSyntax.ToString());
     }
 
-    public static string GetAttributeDeclarationAsCSharpCode(this AttributeData attributeData, string attributeName)
+    public static string GetAttributeDeclarationAsCSharpCode(
+        this AttributeData attributeData,
+        string attributeName
+    )
     {
-        var attributeTypeName = attributeData.AttributeClass.ToDisplayString(NullableFlowState.MaybeNull, SymbolDisplayFormat.FullyQualifiedFormat);
-        var arguments = string.Join(", ", attributeData.NamedArguments.Select(na => $"{na.Key} = {GetArgumentValueAsCode(na.Value)}"));
+        var attributeTypeName = attributeData.AttributeClass.ToDisplayString(
+            NullableFlowState.MaybeNull,
+            SymbolDisplayFormat.FullyQualifiedFormat
+        );
+        var arguments = string.Join(
+            ", ",
+            attributeData.NamedArguments.Select(
+                na => $"{na.Key} = {GetArgumentValueAsCode(na.Value)}"
+            )
+        );
         if (attributeData.ConstructorArguments.Length > 0)
         {
-            var positionalArguments = string.Join(", ", attributeData.ConstructorArguments.Select(GetArgumentValueAsCode));
+            var positionalArguments = string.Join(
+                ", ",
+                attributeData.ConstructorArguments.Select(GetArgumentValueAsCode)
+            );
             if (!string.IsNullOrEmpty(arguments))
                 arguments += ", ";
             arguments += positionalArguments;
@@ -166,7 +212,10 @@ internal static class AttributeExtensions
         }
         else if (argument.Kind == TypedConstantKind.Array)
         {
-            var elementValues = string.Join(", ", argument.Values.Select(v => GetArgumentValueAsCode(v)));
+            var elementValues = string.Join(
+                ", ",
+                argument.Values.Select(v => GetArgumentValueAsCode(v))
+            );
             return $"new {argument.Type}[{argument.Values.Length}] {{ {elementValues} }}";
         }
         else

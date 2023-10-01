@@ -1,4 +1,5 @@
 namespace Microsoft.CodeAnalysis;
+
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp;
 
@@ -16,7 +17,8 @@ public static class IMethodDeclarationSymbolExtensions
             modifiers: SyntaxFactory.TokenList(),
             type: parameterSymbol.Type.ToTypeSyntax(),
             identifier: SyntaxFactory.Identifier(parameterSymbol.Name),
-            @default: null);
+            @default: null
+        );
     }
 
     /// <summary>
@@ -36,10 +38,14 @@ public static class IMethodDeclarationSymbolExtensions
             parameterList: SyntaxFactory.ParameterList(
                 SyntaxFactory.SeparatedList(
                     methodSymbol.Parameters.Select(
-                        parameterSymbol => parameterSymbol.ToParameterSyntax()))),
+                        parameterSymbol => parameterSymbol.ToParameterSyntax()
+                    )
+                )
+            ),
             constraintClauses: SyntaxFactory.List<TypeParameterConstraintClauseSyntax>(),
             body: SyntaxFactory.Block(),
             expressionBody: null,
-            semicolonToken: SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+            semicolonToken: SyntaxFactory.Token(SyntaxKind.SemicolonToken)
+        );
     }
 }

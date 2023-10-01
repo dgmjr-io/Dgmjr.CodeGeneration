@@ -10,7 +10,6 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class ScribanCompileTimeTemplateChecker : DiagnosticAnalyzer
 {
@@ -20,9 +19,18 @@ public class ScribanCompileTimeTemplateChecker : DiagnosticAnalyzer
     private const string Description = "Error compiling the template: {0}.";
     private const string Category = "Scriban";
 
-    private static readonly DiagnosticDescriptor Rules = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Error, isEnabledByDefault: false, description: Description);
+    private static readonly DiagnosticDescriptor Rules = new DiagnosticDescriptor(
+        DiagnosticId,
+        Title,
+        MessageFormat,
+        Category,
+        DiagnosticSeverity.Error,
+        isEnabledByDefault: false,
+        description: Description
+    );
 
-    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rules);
+    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
+        ImmutableArray.Create(Rules);
 
     public override void Initialize(AnalysisContext context)
     {

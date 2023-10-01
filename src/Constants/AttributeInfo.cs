@@ -14,4 +14,9 @@ using System;
 
 namespace Dgmjr.CodeGeneration;
 
-public record struct AttributeInfo(string attribute_class_name, Type attribute_base_type, string attribute_targets, AttributeProperty[] attribute_properties);
+public record struct AttributeInfo(
+    string attribute_class_name,
+    Type attribute_base_type,
+    string attribute_targets,
+    AttributeProperty[] attribute_properties
+);

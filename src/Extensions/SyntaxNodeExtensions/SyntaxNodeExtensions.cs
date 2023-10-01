@@ -38,9 +38,11 @@ internal static class SyntaxNodeExtensions
 
         // Keep moving "out" of nested classes etc until we get to a namespace
         // or until we run out of parents
-        while (potentialNamespaceParent != null &&
-                potentialNamespaceParent is not NamespaceDeclarationSyntax
-                && potentialNamespaceParent is not FileScopedNamespaceDeclarationSyntax)
+        while (
+            potentialNamespaceParent != null
+            && potentialNamespaceParent is not NamespaceDeclarationSyntax
+            && potentialNamespaceParent is not FileScopedNamespaceDeclarationSyntax
+        )
         {
             potentialNamespaceParent = potentialNamespaceParent.Parent;
         }
@@ -70,9 +72,12 @@ internal static class SyntaxNodeExtensions
         return nameSpace;
     }
 
-
     // https://stackoverflow.com/questions/20458457/getting-class-fullname-including-namespace-from-roslyn-classdeclarationsyntax
-    public static bool TryGetParentSyntax<T>(this SyntaxNode? syntaxNode, /*[NotNullWhen(true)]*/ out T? result) where T : SyntaxNode
+    public static bool TryGetParentSyntax<T>(
+        this SyntaxNode? syntaxNode, /*[NotNullWhen(true)]*/
+        out T? result
+    )
+        where T : SyntaxNode
     {
         result = null;
 
@@ -113,8 +118,10 @@ internal static class SyntaxNodeExtensions
         {
             allUsings = parent switch
             {
-                NamespaceDeclarationSyntax namespaceDeclarationSyntax => allUsings.AddRange(namespaceDeclarationSyntax.Usings),
-                CompilationUnitSyntax compilationUnitSyntax => allUsings.AddRange(compilationUnitSyntax.Usings),
+                NamespaceDeclarationSyntax namespaceDeclarationSyntax
+                    => allUsings.AddRange(namespaceDeclarationSyntax.Usings),
+                CompilationUnitSyntax compilationUnitSyntax
+                    => allUsings.AddRange(compilationUnitSyntax.Usings),
                 _ => allUsings
             };
         }
@@ -122,24 +129,55 @@ internal static class SyntaxNodeExtensions
         return allUsings;
     }
 
-    public static IReadOnlyList<T> FindDescendantNodes<T>(this SyntaxNode syntaxNode, Func<T, bool>? predicate = null) where T : SyntaxNode
+    public static IReadOnlyList<T> FindDescendantNodes<T>(
+        this SyntaxNode syntaxNode,
+        Func<T, bool>? predicate = null
+    )
+        where T : SyntaxNode
     {
-        return syntaxNode.DescendantNodes().OfType<T>().Where(x => predicate == null || predicate(x)).ToList();
+        return syntaxNode
+            .DescendantNodes()
+            .OfType<T>()
+            .Where(x => predicate == null || predicate(x))
+            .ToList();
     }
 
-    public static T? FindDescendantNode<T>(this SyntaxNode syntaxNode, Func<T, bool>? predicate = null) where T : SyntaxNode
+    public static T? FindDescendantNode<T>(
+        this SyntaxNode syntaxNode,
+        Func<T, bool>? predicate = null
+    )
+        where T : SyntaxNode
     {
-        return syntaxNode.DescendantNodes().OfType<T>().FirstOrDefault(x => predicate == null || predicate(x));
+        return syntaxNode
+            .DescendantNodes()
+            .OfType<T>()
+            .FirstOrDefault(x => predicate == null || predicate(x));
     }
 
-    public static AttributeSyntax? GetAttribute(this SyntaxNode syntaxNode, string attributeMetadataName)
+    public static AttributeSyntax? GetAttribute(
+        this SyntaxNode syntaxNode,
+        string attributeMetadataName
+    )
     {
-        var attributeLists =
-            (syntaxNode is BaseTypeDeclarationSyntax tds ? (SyntaxList<AttributeListSyntax>)tds.AttributeLists :
-            (syntaxNode is BaseFieldDeclarationSyntax fds ? (SyntaxList<AttributeListSyntax>)fds.AttributeLists :
-            (syntaxNode is BaseMethodDeclarationSyntax mds ? (SyntaxList<AttributeListSyntax>)mds.AttributeLists :
-            (syntaxNode is BasePropertyDeclarationSyntax pds ? (SyntaxList<AttributeListSyntax>)pds.AttributeLists :
-            SyntaxFactory.List<AttributeListSyntax>()))));
-        return attributeLists.SelectMany(x => x.Attributes).FirstOrDefault(x => x.Name.ToString() == attributeMetadataName);
+        var attributeLists = (
+            syntaxNode is BaseTypeDeclarationSyntax tds
+                ? (SyntaxList<AttributeListSyntax>)tds.AttributeLists
+                : (
+                    syntaxNode is BaseFieldDeclarationSyntax fds
+                        ? (SyntaxList<AttributeListSyntax>)fds.AttributeLists
+                        : (
+                            syntaxNode is BaseMethodDeclarationSyntax mds
+                                ? (SyntaxList<AttributeListSyntax>)mds.AttributeLists
+                                : (
+                                    syntaxNode is BasePropertyDeclarationSyntax pds
+                                        ? (SyntaxList<AttributeListSyntax>)pds.AttributeLists
+                                        : SyntaxFactory.List<AttributeListSyntax>()
+                                )
+                        )
+                )
+        );
+        return attributeLists
+            .SelectMany(x => x.Attributes)
+            .FirstOrDefault(x => x.Name.ToString() == attributeMetadataName);
     }
 }

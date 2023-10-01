@@ -10,6 +10,7 @@
 //      License: MIT (https://opensource.org/licenses/MIT)
 //
 namespace Microsoft.CodeAnalysis;
+
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp;
