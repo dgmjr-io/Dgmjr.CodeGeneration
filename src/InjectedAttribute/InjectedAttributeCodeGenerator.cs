@@ -25,7 +25,7 @@ public class InjectedConstructorGenerator : IIncrementalGenerator
     private const string AttributeDeclaration =
         @$"  
             [System.AttributeUsage(System.AttributeTargets.Property)]  
-            [System.CodeDom.Compiler.GeneratedCode(""InjectedConstructorGenerator"", ""{ThisAssembly .Info .Version}"")]
+            [System.CodeDom.Compiler.GeneratedCode(""InjectedConstructorGenerator"", ""{ThisAssembly.Info.Version}"")]
             public class InjectedAttribute : System.Attribute {{  }}  ";
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
