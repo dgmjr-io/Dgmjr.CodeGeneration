@@ -22,7 +22,7 @@ public class RegexGuardGenerator : ISourceGenerator
     private const string AttributeText =
         @"
         using System;
-        
+
         [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
         public class RegexGuardAttribute : Attribute
         {
@@ -31,7 +31,7 @@ public class RegexGuardGenerator : ISourceGenerator
 
             public RegexGuardAttribute(string pattern)
             {
-                if (string.IsNullOrEmpty(pattern))
+                if (IsNullOrEmpty(pattern))
                     throw new ArgumentException(""Pattern cannot be null or empty."", nameof(pattern));
 
                 _pattern = pattern;

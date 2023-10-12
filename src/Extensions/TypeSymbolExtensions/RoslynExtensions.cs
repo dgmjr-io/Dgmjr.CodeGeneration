@@ -114,7 +114,7 @@ internal static class RoslynExtensions
     //         constraints += constraintType.GetFullTypeString();
     //     }
 
-    //     if (string.IsNullOrEmpty(constraints))
+    //     if (IsNullOrEmpty(constraints))
     //         return null;
 
     //     result += constraints;

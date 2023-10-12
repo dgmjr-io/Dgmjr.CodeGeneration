@@ -5,5 +5,8 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
         <PackageReference Include="Microsoft.CodeAnalysis.Common" />
+        <PackageReference Include="Dgmjr.Logging.Extensions" />
+        <PackageReference Include="Dgmjr.Primitives" />
+        <SourceGeneratorPackageReference Include="Dgmjr.Enumerations.CodeGenerator" />
     </ItemGroup>
 </Project>

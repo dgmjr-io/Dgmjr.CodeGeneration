@@ -3,10 +3,12 @@ namespace Dgmjr.CodeGeneration.Logging;
 using System.ComponentModel;
 using System.Data.Common;
 using System.Transactions;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+
 using static LogEvents;
 using static Microsoft.Extensions.Logging.LogLevel;
 
@@ -38,21 +40,4 @@ internal static partial class LoggingExtensions
 
     public static void LogBeginLog(this ILogger logger, string generator, DateTimeOffset dto) =>
         _beginLog2(logger, generator, dto.ToLocalTime(), null);
-}
-
-internal static partial class LogEvents
-{
-    public static class TransactionScopeStarted
-    {
-        public const int Id = 1;
-        public const string Name = "TransactionScopeStarted";
-        public static readonly EventId Instance = new(Id, Name);
-    }
-
-    public static class BeginLog
-    {
-        public const int Id = 0;
-        public const string Name = "BeginLog";
-        public static readonly EventId Instance = new(Id, Name);
-    }
 }

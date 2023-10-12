@@ -22,11 +22,11 @@ internal static class StringExtensions
 
 #if NET7_0_OR_GREATER
     [CompiledRegex(GenericTypeArgumentPattern)]
-    private static partial REx ExtractValueBetweenRegex();
+    private static partial Regex ExtractValueBetweenRegex();
 #else
-    private static readonly REx _extractValueBetween = new(GenericTypeArgumentPattern, Compiled);
+    private static readonly Regex _extractValueBetween = new(GenericTypeArgumentPattern, Compiled);
 
-    private static REx ExtractValueBetweenRegex() => _extractValueBetween;
+    private static Regex ExtractValueBetweenRegex() => _extractValueBetween;
 #endif
 
     public static bool TryGetGenericTypeArguments(

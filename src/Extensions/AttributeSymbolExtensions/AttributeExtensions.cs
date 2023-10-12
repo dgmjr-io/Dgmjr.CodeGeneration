@@ -188,7 +188,7 @@ internal static class AttributeExtensions
                 ", ",
                 attributeData.ConstructorArguments.Select(GetArgumentValueAsCode)
             );
-            if (!string.IsNullOrEmpty(arguments))
+            if (!IsNullOrEmpty(arguments))
                 arguments += ", ";
             arguments += positionalArguments;
         }
