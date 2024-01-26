@@ -41,11 +41,13 @@ public static class MemberSymbolInvocationExtensions
         var program = $$"""
         using System;
 
-        public static class {{programClassName}}
-        {
-            public static object Run() => {{methodSymbol.ContainingType.ToDisplayString()}}.{{methodSymbol.Name}}({{Join(", ", arguments.Select(arg => $"{(arg is string ? "\"" : "")}{arg}{(arg is string ? "\"" : "")}"))}});
-        }
-        """;
+        public static class {{programClassName
+}
+}
+{
+    public static object Run() => { { methodSymbol.ContainingType.ToDisplayString()} }.{ { methodSymbol.Name} } ({ { Join(", ", arguments.Select(arg => $"{(arg is string ? "\"" : "")}{arg}{(arg is string ? "\"" : "")}"))} });
+}
+""";
         return AddToCompilatonAndCallRun(compilation, program, programClassName);
     }
 
@@ -53,24 +55,24 @@ public static class MemberSymbolInvocationExtensions
         this IPropertySymbol propertySymbol,
         Compilation compilation
     )
+{
+    if (
+        !propertySymbol.IsStatic || propertySymbol.DeclaredAccessibility != Accessibility.Public
+    )
     {
-        if (
-            !propertySymbol.IsStatic || propertySymbol.DeclaredAccessibility != Accessibility.Public
-        )
-        {
-            throw new InvalidOperationException(
-                $"The property {propertySymbol.ToDisplayString()} must be public and static."
-            );
-        }
-        var programClassName = $"Program_{guid.NewGuid().ToByteArray().ToHexString()}";
-        var program = $$"""
+        throw new InvalidOperationException(
+            $"The property {propertySymbol.ToDisplayString()} must be public and static."
+        );
+    }
+    var programClassName = $"Program_{guid.NewGuid().ToByteArray().ToHexString()}";
+    var program = $$"""
         using System;
 
-        public static class {{programClassName}}
+        public static class {{ programClassName}}
         {
-            public static object Run() => {{propertySymbol.ContainingType.ToDisplayString()}}.{{propertySymbol.Name}};
-        }
-        """;
+    public static object Run() => { { propertySymbol.ContainingType.ToDisplayString()} }.{ { propertySymbol.Name} };
+}
+""";
         return AddToCompilatonAndCallRun(compilation, program, programClassName);
     }
 
@@ -79,37 +81,37 @@ public static class MemberSymbolInvocationExtensions
         string cSharpCode,
         string programClassName
     )
-    {
-        compilation = compilation.AddSyntaxTrees(
-            SyntaxFactory.ParseSyntaxTree(cSharpCode, compilation.SyntaxTrees.First().Options)
-        );
-        return EmitAndCallRun(compilation, programClassName, cSharpCode);
-    }
+{
+    compilation = compilation.AddSyntaxTrees(
+        SyntaxFactory.ParseSyntaxTree(cSharpCode, compilation.SyntaxTrees.First().Options)
+    );
+    return EmitAndCallRun(compilation, programClassName, cSharpCode);
+}
 
-    private static object EmitAndCallRun(
-        Compilation compilation,
-        string programClassName,
-        string? extraInfo = ""
-    )
+private static object EmitAndCallRun(
+    Compilation compilation,
+    string programClassName,
+    string? extraInfo = ""
+)
+{
+    using var asmStream = new MemoryStream();
+    var emitResult = compilation.Emit(
+        asmStream,
+        options: new EmitOptions(false, debugInformationFormat: DebugInformationFormat.Embedded)
+    );
+    if (!emitResult.Success)
     {
-        using var asmStream = new MemoryStream();
-        var emitResult = compilation.Emit(
-            asmStream,
-            options: new EmitOptions(false, debugInformationFormat: DebugInformationFormat.Embedded)
+        var errorDiagnostic = emitResult.Diagnostics.FirstOrDefault(
+            diag => diag.Severity == DiagnosticSeverity.Error
         );
-        if (!emitResult.Success)
-        {
-            var errorDiagnostic = emitResult.Diagnostics.FirstOrDefault(
-                diag => diag.Severity == DiagnosticSeverity.Error
-            );
-            throw new CompilationException(
-                $"{programClassName}: {errorDiagnostic?.GetMessage()}{(!IsNullOrEmpty(extraInfo) ? ", *" : "")}{extraInfo?.Replace("\n", " ").Replace("\r", " ")}{(!IsNullOrEmpty(extraInfo) ? "*" : "")}"
-            );
-        }
-        asmStream.Flush();
-        var asm = Assembly.Load(asmStream.GetBuffer());
-        var programClass = Find(asm.GetExportedTypes(), t => t.Name == programClassName);
-        var runMethod = programClass.GetMethod("Run");
-        return runMethod.Invoke(null, null);
+        throw new CompilationException(
+            $"{programClassName}: {errorDiagnostic?.GetMessage()}{(!IsNullOrEmpty(extraInfo) ? ", *" : "")}{extraInfo?.Replace("\n", " ").Replace("\r", " ")}{(!IsNullOrEmpty(extraInfo) ? "*" : "")}"
+        );
     }
+    asmStream.Flush();
+    var asm = Assembly.Load(asmStream.GetBuffer());
+    var programClass = Find(asm.GetExportedTypes(), t => t.Name == programClassName);
+    var runMethod = programClass.GetMethod("Run");
+    return runMethod.Invoke(null, null);
+}
 }
