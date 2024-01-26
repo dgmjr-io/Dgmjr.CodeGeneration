@@ -1,20 +1,18 @@
 {
-    "azureAutomation.directory.basePath": "Users/david/Azure",
-    "sqltools.connections": [
-        {
-            "mssqlOptions": {
-                "appName": "SQLTools",
-                "useUTC": true,
-                "encrypt": true
-            },
-            "previewLimit": 50,
-            "server": "dgmjr.database.windows.net",
-            "port": 1433,
-            "driver": "MSSQL",
-            "name": "ProGet",
-            "database": "proget",
-            "username": "david",
-            "password": ""
-        }
-    ]
+  "azureAutomation.directory.basePath": "Users/david/Azure",
+  "sqltools.connections": [ {
+    "database": "proget",
+    "driver": "MSSQL",
+    "mssqlOptions": {
+      "appName": "SQLTools",
+      "encrypt": true,
+      "useUTC": true
+    },
+    "name": "ProGet",
+    "password": "",
+    "port": 1433,
+    "previewLimit": 50,
+    "server": "dgmjr.database.windows.net",
+    "username": "david"
+  } ]
 }
