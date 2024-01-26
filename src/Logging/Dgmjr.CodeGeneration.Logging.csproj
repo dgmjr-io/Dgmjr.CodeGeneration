@@ -7,6 +7,6 @@
         <PackageReference Include="Microsoft.CodeAnalysis.Common" />
         <PackageReference Include="Dgmjr.Logging.Extensions" />
         <PackageReference Include="Dgmjr.Primitives" />
-        <SourceGeneratorPackageReference Include="Dgmjr.Enumerations.CodeGenerator" />
+        <PackageReference Include="Dgmjr.Enumerations.CodeGenerator" IncludeAssets="Analyzers;Build" ExcludeAssets="Native;BuildTransitive;BuildMultitargeting;ContentFiles;Compile;Runtime" PrivateAssets="All" />
     </ItemGroup>
 </Project>
